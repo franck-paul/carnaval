@@ -1,21 +1,33 @@
-<?php 
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of Carnaval a plugin for Dotclear 2.
-# 
-# Copyright (c) 2008-2010 Osku and contributors
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
-if (!defined('DC_RC_PATH')) { return; }
+<?php
+/**
+ * @brief Carnaval, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugins
+ *
+ * @author Franck Paul and contributors
+ *
+ * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+if (!defined('DC_RC_PATH')) {
+    return;
+}
 
 $this->registerModule(
-	/* Name */		'Carnaval',
-	/* Description*/	'Identify comments',
-	/* Author */		'Osku and contributors',
-	/* Version */		'1.6.1',
-	/* Permissions */	'contentadmin'
+    'Carnaval',  // Name
+    'Identify comments', // Description
+    'Osku and contributors',                // Author
+    '1.6.1',                        // Version
+    [
+        //        'requires'    => [['core', '2.14']],
+        'permissions' => 'contentadmin',
+        'type'        => 'plugin',
+        'settings'    => [
+        ],
+
+        'details'    => 'https://open-time.net/?q=carnaval',       // Details URL
+        'support'    => 'https://github.com/franck-paul/carnaval', // Support URL
+        'repository' => 'https://raw.githubusercontent.com/franck-paul/carnaval/main/dcstore.xml'
+    ]
 );
-?>
