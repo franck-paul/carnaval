@@ -1,4 +1,6 @@
-<?php /* -*- tab-width: 5; indent-tabs-mode: t; c-basic-offset: 5 -*- */
+<?php
+
+/* -*- tab-width: 5; indent-tabs-mode: t; c-basic-offset: 5 -*- */
 /***************************************************************\
  *  This is 'Javatar', a plugin for Dotclear 2                 *
  *                                                             *
@@ -13,7 +15,6 @@
  *  if not, write to the Free Software Foundation, Inc.,       *
  *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA    *
 \***************************************************************/
-if (!isset($__resources['help']['carnaval'])) {
-	$__resources['help']['carnaval'] = dirname(__FILE__).'/help.html';
+if (!isset(dcCore::app()->resources['help']['carnaval'])) {
+    dcCore::app()->resources['help']['carnaval'] = __DIR__ . '/help.html';
 }
-?>

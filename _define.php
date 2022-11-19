@@ -15,19 +15,21 @@ if (!defined('DC_RC_PATH')) {
 }
 
 $this->registerModule(
-    'Carnaval',  // Name
-    'Identify comments', // Description
-    'Osku and contributors',                // Author
-    '1.6.1',                        // Version
+    'Carnaval',
+    'Identify comments',
+    'Osku and contributors',
+    '1.7',
     [
-        //        'requires'    => [['core', '2.14']],
-        'permissions' => 'contentadmin',
-        'type'        => 'plugin',
-        'settings'    => [
+        'requires'    => [['core', '2.24']],
+        'permissions' => dcCore::app()->auth->makePermissions([
+            dcAuth::PERMISSION_CONTENT_ADMIN,
+        ]),
+        'type'     => 'plugin',
+        'settings' => [
         ],
 
-        'details'    => 'https://open-time.net/?q=carnaval',       // Details URL
-        'support'    => 'https://github.com/franck-paul/carnaval', // Support URL
-        'repository' => 'https://raw.githubusercontent.com/franck-paul/carnaval/master/dcstore.xml'
+        'details'    => 'https://open-time.net/?q=carnaval',
+        'support'    => 'https://github.com/franck-paul/carnaval',
+        'repository' => 'https://raw.githubusercontent.com/franck-paul/carnaval/master/dcstore.xml',
     ]
 );
