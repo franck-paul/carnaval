@@ -18,7 +18,7 @@ $new_version = dcCore::app()->plugins->moduleInfo('carnaval', 'version');
 
 $current_version = dcCore::app()->getVersion('carnaval');
 
-if (version_compare($current_version, $new_version, '>=')) {
+if (version_compare((string) $current_version, $new_version, '>=')) {
     return;
 }
 
