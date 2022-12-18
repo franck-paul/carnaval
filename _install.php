@@ -14,11 +14,7 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     exit;
 }
 
-$new_version = dcCore::app()->plugins->moduleInfo('carnaval', 'version');
-
-$current_version = dcCore::app()->getVersion('carnaval');
-
-if (version_compare((string) $current_version, $new_version, '>=')) {
+if (!dcCore::app()->newVersion(basename(__DIR__), dcCore::app()->plugins->moduleInfo(basename(__DIR__), 'version'))) {
     return;
 }
 
@@ -43,7 +39,5 @@ $changes = $si->synchronize($s);
 $s = & dcCore::app()->blog->settings->carnaval;
 $s->put('carnaval_active', false, 'boolean', 'Carnaval activation flag', true, true);
 $s->put('carnaval_colors', false, 'boolean', 'Use colors defined with Carnaval plugin', true, true);
-
-dcCore::app()->setVersion('carnaval', $new_version);
 
 return true;

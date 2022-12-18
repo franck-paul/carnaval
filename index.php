@@ -15,7 +15,7 @@ if (!defined('DC_CONTEXT_ADMIN')) {
 
 //$carnaval = new dcCarnaval (dcCore::app()->blog);
 $can_write_images = carnavalConfig::canWriteImages();
-$comment_author   = $comment_author_mail   = $comment_class   = $comment_text_color   = $comment_background_color   = '';
+$comment_author   = $comment_author_mail = $comment_class = $comment_text_color = $comment_background_color = '';
 
 $add_carnaval  = false;
 $edit_carnaval = false;
@@ -98,7 +98,7 @@ if (!empty($_POST['carnaval_class'])) {
     }
 
     if (!dcCore::app()->error->flag()) {
-        http::redirect($p_url . $redir);
+        http::redirect(dcCore::app()->admin->getPageURL() . $redir);
     }
 }
 
@@ -115,7 +115,7 @@ if (!empty($_POST['removeaction']) && !empty($_POST['select'])) {
     }
 
     if (!dcCore::app()->error->flag()) {
-        http::redirect($p_url . '&removed=1');
+        http::redirect(dcCore::app()->admin->getPageURL() . '&removed=1');
     }
 }
 
@@ -133,7 +133,7 @@ if (!empty($_POST['saveconfig'])) {
     }
 
     if (!dcCore::app()->error->flag()) {
-        http::redirect($p_url . '&config=1');
+        http::redirect(dcCore::app()->admin->getPageURL() . '&config=1');
     }
 }
 
@@ -180,7 +180,7 @@ if (!empty($_GET['upd'])) {
 }
 
 echo
-'<form action="' . $p_url . '" method="post" id="config-form">
+'<form action="' . dcCore::app()->admin->getPageURL() . '" method="post" id="config-form">
 <fieldset><legend>' . __('Plugin activation') . '</legend>
 <p class="field">' .
 form::checkbox('active', 1, $active) .
@@ -199,7 +199,7 @@ dcCore::app()->formNonce() .
 
 if (!$rs->isEmpty()) {
     echo
-    '<form class="clear" action="' . $p_url . '" method="post" id="classes-form">' .
+    '<form class="clear" action="' . dcCore::app()->admin->getPageURL() . '" method="post" id="classes-form">' .
     '<fieldset class="two-cols"><legend>' . __('My CSS Classes') . '</legend>' .
     '<table class="maximal">' .
     '<thead>' .
@@ -223,7 +223,7 @@ if (!$rs->isEmpty()) {
         '<td><code>' . html::escapeHTML($rs->comment_class) . '</code></td>' .
         '<td>' . html::escapeHTML($rs->comment_author_mail) . '</td>' .
         '<td><span style="padding:1px 5px;color:' . $color . ';background-color:' . $backgroundcolor . '">' . __('Thanks to use Carnaval') . '</span></td>' .
-        '<td class="nowrap status"><a href="' . $p_url . '&amp;id=' . $rs->class_id . '"><img src="images/edit-mini.png" alt="" title="' . __('Edit this record') . '" /></a></td>' .
+        '<td class="nowrap status"><a href="' . dcCore::app()->admin->getPageURL() . '&amp;id=' . $rs->class_id . '"><img src="images/edit-mini.png" alt="" title="' . __('Edit this record') . '" /></a></td>' .
         '</tr>';
     }
 
@@ -245,7 +245,7 @@ if (!$add_carnaval) {
 }
 
 echo
-'<form action="' . $p_url . '" method="post" id="add-css">
+'<form action="' . dcCore::app()->admin->getPageURL() . '" method="post" id="add-css">
 <fieldset class="clear"><legend>' . $legend . '</legend>
 <p class="field"><label class="classic required" title="' . __('Required field') . '">' . __('Name:') .
 form::field('comment_author', 30, 255, html::escapeHTML($comment_author), '', 2) .
