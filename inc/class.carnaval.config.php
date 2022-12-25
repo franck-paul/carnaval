@@ -82,8 +82,10 @@ class carnavalConfig
             throw new Exception(__('Unable to create images.'));
         }
 
-        $comment_t = __DIR__ . '/../../../plugins/blowupConfig/alpha-img/comment-t.png';
-        $comment_b = __DIR__ . '/../../../plugins/blowupConfig/alpha-img/comment-b.png';
+        $blowupConfigRoot = dcCore::app()->plugins->moduleRoot('blowupConfig');
+
+        $comment_t = $blowupConfigRoot . '/alpha-img/comment-t.png';
+        $comment_b = $blowupConfigRoot . '/alpha-img/comment-b.png';
 
         $cval_comment_t = $name . '-comment-t.png';
         $cval_comment_b = $name . '-comment-b.png';

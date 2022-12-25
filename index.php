@@ -161,7 +161,13 @@ try {
 </head>
 <body>
 <?php
-    echo '<h2>' . html::escapeHTML(dcCore::app()->blog->name) . ' &rsaquo; ' . __('Carnaval') . '</h2>';
+echo dcPage::breadcrumb(
+        [
+            html::escapeHTML(dcCore::app()->blog->name) => '',
+            __('Carnaval')                              => '',
+        ]
+    );
+//echo dcPage::notices();
 
 if (!empty($_GET['config'])) {
     echo '<p class="message">' . __('Configuration successfully updated.') . '</p>';
@@ -188,7 +194,7 @@ form::checkbox('active', 1, $active) .
 </p>
 <p class="field">' .
 form::checkbox('colors', 1, $colors) .
-'<label class=" classic" for="active">' . __('Use defined colors') . '</label>
+'<label class=" classic" for="colors">' . __('Use defined colors') . '</label>
 </p>
 <p>' . form::hidden(['p'], 'carnaval') .
 dcCore::app()->formNonce() .

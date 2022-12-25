@@ -18,18 +18,18 @@ $this->registerModule(
     'Carnaval',
     'Identify comments',
     'Osku and contributors',
-    '2.1',
+    '2.2',
     [
         'requires'    => [['core', '2.24']],
         'permissions' => dcCore::app()->auth->makePermissions([
             dcAuth::PERMISSION_CONTENT_ADMIN,
         ]),
-        'type'     => 'plugin',
-        'settings' => [
+        'type'        => 'plugin',
+        'settings'    => [
         ],
 
-        'details'    => 'https://open-time.net/?q=carnaval',
-        'support'    => 'https://github.com/franck-paul/carnaval',
-        'repository' => 'https://raw.githubusercontent.com/franck-paul/carnaval/master/dcstore.xml',
+        'details'     => 'https://open-time.net/?q=carnaval',
+        'support'     => 'https://github.com/franck-paul/carnaval',
+        'repository'  => 'https://raw.githubusercontent.com/franck-paul/carnaval/master/dcstore.xml',
     ]
 );

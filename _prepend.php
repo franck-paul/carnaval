@@ -17,7 +17,6 @@ if (!defined('DC_RC_PATH')) {
 if (version_compare(DC_VERSION, '2.2-beta', '<')) {
     return;
 }
-dcCore::app()->blog->settings->addNamespace('carnaval');
 Clearbricks::lib()->autoload([
     'dcCarnaval'     => __DIR__ . '/inc/class.carnaval.php',
     'carnavalConfig' => __DIR__ . '/inc/class.carnaval.config.php',
