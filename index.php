@@ -148,10 +148,10 @@ try {
 <head>
     <title><?php echo __('Carnaval'); ?></title>
     <?php echo dcPage::jsColorPicker(); ?>
-    <?php echo dcPage::jsLoad('index.php?pf=carnaval/admin.js'); ?>
-    <link rel="stylesheet" type="text/css" href="index.php?pf=carnaval/style.css" />
+    <?php echo dcPage::jsLoad('index.php?pf=carnaval/js/admin.js'); ?>
+    <link rel="stylesheet" type="text/css" href="index.php?pf=carnaval/css/style.css" />
     <?php if (!$add_carnaval) {
-        echo dcPage::jsLoad('index.php?pf=carnaval/form.js');
+        echo dcPage::jsLoad('index.php?pf=carnaval/js/form.js');
     }?>
     <script type="text/javascript">
     //<![CDATA[
