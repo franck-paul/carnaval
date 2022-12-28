@@ -14,12 +14,9 @@ if (!defined('DC_RC_PATH')) {
     return;
 }
 
-if (version_compare(DC_VERSION, '2.2-beta', '<')) {
-    return;
-}
 Clearbricks::lib()->autoload([
     'dcCarnaval'     => __DIR__ . '/inc/class.carnaval.php',
     'carnavalConfig' => __DIR__ . '/inc/class.carnaval.config.php',
 ]);
 
-dcCore::app()->carnaval = new dcCarnaval(dcCore::app());
+dcCore::app()->carnaval = new dcCarnaval();

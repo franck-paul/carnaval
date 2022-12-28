@@ -14,11 +14,13 @@ if (!defined('DC_CONTEXT_ADMIN')) {
     return;
 }
 
-dcCore::app()->addBehavior('exportFullV2', ['carnavalBehaviors','exportFull']);
-dcCore::app()->addBehavior('exportSingleV2', ['carnavalBehaviors','exportSingle']);
-dcCore::app()->addBehavior('importInitV2', ['carnavalBehaviors','importInit']);
-dcCore::app()->addBehavior('importFullV2', ['carnavalBehaviors','importFull']);
-dcCore::app()->addBehavior('importSingleV2', ['carnavalBehaviors','importSingle']);
+dcCore::app()->addBehaviors([
+    'exportFullV2'   => ['carnavalBehaviors','exportFull'],
+    'exportSingleV2' => ['carnavalBehaviors','exportSingle'],
+    'importInitV2'   => ['carnavalBehaviors','importInit'],
+    'importFullV2'   => ['carnavalBehaviors','importFull'],
+    'importSingleV2' => ['carnavalBehaviors','importSingle'],
+]);
 
 dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
     __('Carnaval'),
@@ -53,7 +55,7 @@ class carnavalBehaviors
     public static function importInit($bk)
     {
         $bk->cur_alias = dcCore::app()->con->openCursor(dcCore::app()->prefix . 'carnaval');
-        $bk->carnaval  = new dcCarnaval(dcCore::app());
+        $bk->carnaval  = new dcCarnaval();
         $bk->classes   = $bk->carnaval->getClasses();
     }
 

@@ -51,8 +51,8 @@ class publicCarnaval
     {
         $cval = dcCore::app()->carnaval->getClasses();
         $css  = [];
+        $res  = '';
         while ($cval->fetch()) {
-            $res      = '';
             $cl_class = $cval->comment_class;
             $cl_txt   = $cval->comment_text_color;
             $cl_backg = $cval->comment_background_color;

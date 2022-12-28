@@ -10,12 +10,16 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 #
 # -- END LICENSE BLOCK ------------------------------------
+
 class dcCarnaval
 {
     public const CARNAVAL_TABLE_NAME = 'carnaval';
 
-    private $table;
     public $found;	// Avoid multiple SQL requests
+
+    private $blog;
+    private $con;
+    private $table;
 
     public function __construct()
     {

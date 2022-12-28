@@ -56,6 +56,7 @@ if (!empty($_POST['carnaval_class'])) {
     $comment_class            = strtolower(text::str2URL($_POST['comment_class']));
     $comment_text_color       = carnavalConfig::adjustColor($_POST['comment_text_color']);
     $comment_background_color = carnavalConfig::adjustColor($_POST['comment_background_color']);
+    $redir                    = '';
 
     if (!empty($_REQUEST['id'])) {
         $id = $_REQUEST['id'];
@@ -138,6 +139,8 @@ if (!empty($_POST['saveconfig'])) {
 }
 
 # Get CSS Classes
+$rs = null;
+
 try {
     $rs = dcCore::app()->carnaval ->getClasses();
 } catch (Exception $e) {
@@ -254,22 +257,22 @@ echo
 '<form action="' . dcCore::app()->admin->getPageURL() . '" method="post" id="add-css">
 <fieldset class="clear"><legend>' . $legend . '</legend>
 <p class="field"><label class="classic required" title="' . __('Required field') . '">' . __('Name:') .
-form::field('comment_author', 30, 255, html::escapeHTML($comment_author), '', 2) .
+form::field('comment_author', 30, 255, html::escapeHTML($comment_author), '', '2') .
 '</label>
 </p>
 <p class="field"><label class="classic required" title="' . __('Required field') . '">' . __('CSS Class:') .
-form::field('comment_class', 30, 255, html::escapeHTML($comment_class), '', 3) .
+form::field('comment_class', 30, 255, html::escapeHTML($comment_class), '', '3') .
 '</label>
 </p>
 <p class="field"><label class="classic required">' . __('Mail:') .
-form::field('comment_author_mail', 30, 255, html::escapeHTML($comment_author_mail), '', 4) .
+form::field('comment_author_mail', 30, 255, html::escapeHTML($comment_author_mail), '', '4') .
 '</label>
 </p>' .
 '<p class="field"><label class="classic">' . __('Text color:') .
-form::field('comment_text_color', 7, 7, html::escapeHTML($comment_text_color), 'colorpicker', 6) .
+form::field('comment_text_color', 7, 7, html::escapeHTML($comment_text_color), 'colorpicker', '6') .
 '</label></p>
 <p class="field"><label class="classic">' . __('Background color:') .
-form::field('comment_background_color', 7, 7, html::escapeHTML($comment_background_color), 'colorpicker', 7) .
+form::field('comment_background_color', 7, 7, html::escapeHTML($comment_background_color), 'colorpicker', '7') .
 '</label></p>' .
 form::hidden(['p'], 'carnaval') .
 dcCore::app()->formNonce();
