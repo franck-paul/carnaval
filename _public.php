@@ -10,9 +10,6 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 #
 # -- END LICENSE BLOCK ------------------------------------
-if (!defined('DC_RC_PATH')) {
-    return;
-}
 
 if (dcCore::app()->blog->settings->carnaval->carnaval_active) {
     dcCore::app()->tpl->addValue('CommentIfMe', ['publicCarnaval','CommentIfMe']);
@@ -58,7 +55,7 @@ class publicCarnaval
             $cl_backg = $cval->comment_background_color;
             self::prop($css, '#comments dd.' . $cl_class, 'color', $cl_txt);
             self::prop($css, '#comments dd.' . $cl_class, 'background-color', $cl_backg);
-            if (dcCore::app()->blog->settings->system->theme == 'default') {
+            if (dcCore::app()->blog->settings->system->theme == 'blowup') {
                 self::backgroundImg($css, '#comments dt.' . $cl_class, $cl_backg, $cl_class . '-comment-t.png');
                 self::backgroundImg($css, '#comments dd.' . $cl_class, $cl_backg, $cl_class . '-comment-b.png');
             }

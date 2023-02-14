@@ -19,7 +19,7 @@ class dcCarnaval
 
     private $blog;
     private $con;
-    private $table;
+    private string $table;
 
     public function __construct()
     {

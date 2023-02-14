@@ -222,8 +222,8 @@ if (!$rs->isEmpty()) {
     '<tbody id="classes-list">';
 
     while ($rs->fetch()) {
-        $color           = ($rs->comment_text_color) ? $rs->comment_text_color : 'inherit';
-        $backgroundcolor = ($rs->comment_background_color) ? $rs->comment_background_color : 'inherit';
+        $color           = $rs->comment_text_color ?: 'inherit';
+        $backgroundcolor = $rs->comment_background_color ?: 'inherit';
 
         echo
         '<tr class="line" id="l_' . $rs->class_id . '">' .

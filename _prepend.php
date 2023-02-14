@@ -10,9 +10,6 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 #
 # -- END LICENSE BLOCK ------------------------------------
-if (!defined('DC_RC_PATH')) {
-    return;
-}
 
 Clearbricks::lib()->autoload([
     'dcCarnaval'     => __DIR__ . '/inc/class.carnaval.php',
