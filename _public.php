@@ -11,6 +11,8 @@
 #
 # -- END LICENSE BLOCK ------------------------------------
 
+use Dotclear\Helper\Html\Html;
+
 if (dcCore::app()->blog->settings->carnaval->carnaval_active) {
     dcCore::app()->tpl->addValue('CommentIfMe', ['publicCarnaval','CommentIfMe']);
 
@@ -24,7 +26,7 @@ class publicCarnaval
     public static function CommentIfMe($attr)
     {
         $ret = $attr['return'] ?? 'me';
-        $ret = html::escapeHTML($ret);
+        $ret = Html::escapeHTML($ret);
 
         return
         '<?php if (dcCore::app()->ctx->comments->isMe()) { ' .
@@ -36,7 +38,7 @@ class publicCarnaval
     {
         $classe_perso = dcCore::app()->carnaval->getCommentClass(dcCore::app()->ctx->comments->getEmail(false));
 
-        return html::escapeHTML($classe_perso);
+        return Html::escapeHTML($classe_perso);
     }
 
     public static function publicHeadContent()

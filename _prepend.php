@@ -11,6 +11,8 @@
 #
 # -- END LICENSE BLOCK ------------------------------------
 
+use Dotclear\Helper\Clearbricks;
+
 Clearbricks::lib()->autoload([
     'dcCarnaval'     => __DIR__ . '/inc/class.carnaval.php',
     'carnavalConfig' => __DIR__ . '/inc/class.carnaval.config.php',

@@ -1,0 +1,136 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Dotclear 2 carnaval module\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-01 09:21+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../git-plugins/carnaval/_admin.php:26 ../git-plugins/carnaval/index.php:157
+#: ../git-plugins/carnaval/index.php:175
+msgid "Carnaval"
+msgstr ""
+
+#: ../git-plugins/carnaval/inc/class.carnaval.config.php:86
+msgid "Unable to create images."
+msgstr ""
+
+#: ../git-plugins/carnaval/inc/class.carnaval.php:71
+msgid "You must provide a name."
+msgstr ""
+
+#: ../git-plugins/carnaval/inc/class.carnaval.php:74
+#: ../git-plugins/carnaval/inc/class.carnaval.php:102
+msgid "You must provide a CSS Class."
+msgstr ""
+
+#: ../git-plugins/carnaval/inc/class.carnaval.php:77
+#: ../git-plugins/carnaval/inc/class.carnaval.php:105
+msgid "You must provide an e-mail."
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:28
+msgid "New CSS Class"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:29
+msgid "save"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:44
+msgid "Edit CSS Class"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:45
+msgid "update"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:166
+msgid "Are you sure you want to delete selected CSS Classes ?"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:185
+msgid "Classes have been successfully removed."
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:189
+msgid "Class has been successfully created."
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:193
+msgid "CSS Class has been successfully updated."
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:201
+msgid "Enable Carnaval"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:205
+msgid "Use defined colors"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:217
+msgid "My CSS Classes"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:221
+msgid "Name"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:222
+msgid "CSS Class"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:223
+msgid "Mail"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:224
+msgid "Colors"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:239
+msgid "Thanks to use Carnaval"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:240
+msgid "Edit this record"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:252
+msgid "delete"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:258
+msgid "New CSS class"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:264
+msgid "Name:"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:268
+msgid "CSS Class:"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:272
+msgid "Mail:"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:276
+msgid "Text color:"
+msgstr ""
+
+#: ../git-plugins/carnaval/index.php:279
+msgid "Background color:"
+msgstr ""

@@ -2,152 +2,114 @@
 # Module: carnaval - 1.6
 # Date: 2010-07-07 15:12:47
 # Translated with translater 1.4.1
-
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: carnaval 1.6\n"
-"POT-Creation-Date: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-01 09:21+0200\n"
 "PO-Revision-Date: 2010-07-07T15:12:47+00:00\n"
 "Last-Translator: osku\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: _admin.php:15
-#: index.php:153
-#: index.php:168
 msgid "Carnaval"
 msgstr "Carnaval"
 
-#: inc/class.carnaval.config.php:87
 msgid "Unable to create images."
 msgstr "Impossible de créer les images."
 
-#: inc/class.carnaval.php:67
 msgid "You must provide a name."
 msgstr "Vous devez fournir un nom."
 
-#: inc/class.carnaval.php:70
-#: inc/class.carnaval.php:98
 msgid "You must provide a CSS Class."
 msgstr "Vous devez fournir une classe CSS."
 
-#: inc/class.carnaval.php:73
-#: inc/class.carnaval.php:101
 msgid "You must provide an e-mail."
 msgstr "Vous devez renseigner une adresse email."
 
-#: index.php:22
 msgid "New CSS Class"
 msgstr "Nouvelle classe CSS"
 
-#: index.php:23
 msgid "save"
 msgstr "enregistrer"
 
-#: index.php:40
 msgid "Edit CSS Class"
 msgstr "Modifier la classe CSS"
 
-#: index.php:41
 msgid "update"
 msgstr "mettre à jour"
 
-#: index.php:162
 msgid "Are you sure you want to delete selected CSS Classes ?"
 msgstr "êtes-vous sûr(e) de vouloir supprimer les classe CSS sélectionnées ?"
 
-#: index.php:171
-msgid "Configuration successfully updated."
-msgstr "Configuration mise à jour avec succès."
-
-#: index.php:175
 msgid "Classes have been successfully removed."
 msgstr "Les classes ont été supprimées avec succès."
 
-#: index.php:179
 msgid "Class has been successfully created."
 msgstr "La classe a été créé avec succès."
 
-#: index.php:183
 msgid "CSS Class has been successfully updated."
 msgstr "La classe CSS a été mise à jour avec succès."
 
-#: index.php:188
-msgid "Plugin activation"
-msgstr "Activation de l'extension"
-
-#: index.php:191
 msgid "Enable Carnaval"
 msgstr "Activer Carnaval"
 
-#: index.php:195
 msgid "Use defined colors"
 msgstr "Utiliser les couleurs définies"
 
-#: index.php:199
-msgid "Save configuration"
-msgstr "Enregistrer la configuration"
-
-#: index.php:209
 msgid "My CSS Classes"
 msgstr "Mes classe CSS"
 
-#: index.php:213
 msgid "Name"
 msgstr "Nom"
 
-#: index.php:214
 msgid "CSS Class"
 msgstr "Classe CSS"
 
-#: index.php:215
 msgid "Mail"
 msgstr "Adresse email"
 
-#: index.php:216
 msgid "Colors"
 msgstr "Couleurs"
 
-#: index.php:232
 msgid "Thanks to use Carnaval"
 msgstr "Merci d'utiliser Carnaval"
 
-#: index.php:233
 msgid "Edit this record"
 msgstr "Modifier l'enregistrement"
 
-#: index.php:245
 msgid "delete"
 msgstr "supprimer"
 
-#: index.php:251
 msgid "New CSS class"
 msgstr "Nouvelle classe CSS"
 
-#: index.php:257
-#: index.php:261
-msgid "Required field"
-msgstr "Champ obligatoire"
-
-#: index.php:257
 msgid "Name:"
 msgstr "Nom :"
 
-#: index.php:261
 msgid "CSS Class:"
 msgstr "Classe CSS :"
 
-#: index.php:265
 msgid "Mail:"
 msgstr "Adresse email :"
 
-#: index.php:269
 msgid "Text color:"
 msgstr "Couleur du texte&nbsp;:"
 
-#: index.php:272
 msgid "Background color:"
 msgstr "Couleur de fond&nbsp;:"
 
+#~ msgid "Configuration successfully updated."
+#~ msgstr "Configuration mise à jour avec succès."
+
+#~ msgid "Plugin activation"
+#~ msgstr "Activation de l'extension"
+
+#~ msgid "Save configuration"
+#~ msgstr "Enregistrer la configuration"
+
+#~ msgid "Required field"
+#~ msgstr "Champ obligatoire"

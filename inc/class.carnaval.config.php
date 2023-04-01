@@ -10,6 +10,10 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 #
 # -- END LICENSE BLOCK ------------------------------------
+
+use Dotclear\Helper\File\Files;
+use Dotclear\Helper\File\Path;
+
 class carnavalConfig
 {
     public static function adjustColor($c)
@@ -37,7 +41,7 @@ class carnavalConfig
 
     public static function imagesPath()
     {
-        return path::real(dcCore::app()->blog->public_path) . '/carnaval-images';
+        return Path::real(dcCore::app()->blog->public_path) . '/carnaval-images';
     }
 
     public static function imagesURL()
@@ -47,7 +51,7 @@ class carnavalConfig
 
     public static function canWriteImages($create = false)
     {
-        $public = path::real(dcCore::app()->blog->public_path);
+        $public = Path::real(dcCore::app()->blog->public_path);
         $imgs   = self::imagesPath();
 
         if (!function_exists('imagecreatetruecolor') || !function_exists('imagepng') || !function_exists('imagecreatefrompng')) {
@@ -63,7 +67,7 @@ class carnavalConfig
                 return false;
             }
             if ($create) {
-                files::makeDir($imgs);
+                Files::makeDir($imgs);
             }
 
             return true;
@@ -129,7 +133,7 @@ class carnavalConfig
 
     public static function dropImage($img)
     {
-        $img = path::real(self::imagesPath() . '/' . $img);
+        $img = Path::real(self::imagesPath() . '/' . $img);
         if (is_writable(dirname($img))) {
             @unlink($img);
             @unlink(dirname($img) . '/.' . basename($img, '.png') . '_sq.jpg');
