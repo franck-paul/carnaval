@@ -1,19 +1,24 @@
-# Language: Français
-# Module: carnaval - 1.6
-# Date: 2010-07-07 15:12:47
-# Translated with translater 1.4.1
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Franck Paul <carnet.franck.paul@gmail.com>, 2023
+# 
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: carnaval 1.6\n"
+"Project-Id-Version: Dotclear 2 carnaval module\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-10 12:36+0200\n"
-"PO-Revision-Date: 2010-07-07T15:12:47+00:00\n"
-"Last-Translator: osku\n"
-"Language-Team: \n"
-"Language: \n"
+"PO-Revision-Date: 2023-06-10 10:41+0000\n"
+"Last-Translator: Franck Paul <carnet.franck.paul@gmail.com>, 2023\n"
+"Language-Team: French (https://app.transifex.com/open-time/teams/109573/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 msgid "Carnaval"
 msgstr "Carnaval"
@@ -101,15 +106,3 @@ msgstr "Couleur du texte&nbsp;:"
 
 msgid "Background color:"
 msgstr "Couleur de fond&nbsp;:"
-
-#~ msgid "Configuration successfully updated."
-#~ msgstr "Configuration mise à jour avec succès."
-
-#~ msgid "Plugin activation"
-#~ msgstr "Activation de l'extension"
-
-#~ msgid "Save configuration"
-#~ msgstr "Enregistrer la configuration"
-
-#~ msgid "Required field"
-#~ msgstr "Champ obligatoire"
