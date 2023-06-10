@@ -1,17 +1,24 @@
 <?php
+/**
+ * @brief carnaval, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugins
+ *
+ * @author Franck Paul and contributors
+ *
+ * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+declare(strict_types=1);
 
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of Carnaval a plugin for Dotclear 2.
-#
-# Copyright (c) 2008-2010 Osku and contributors
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
+namespace Dotclear\Plugin\carnaval;
 
-class dcCarnaval
+use dcCore;
+use Dotclear\Database\MetaRecord;
+use Exception;
+
+class Carnaval
 {
     public const CARNAVAL_TABLE_NAME = 'carnaval';
 
@@ -49,7 +56,7 @@ class dcCarnaval
                 $this->con->escape($params['mail']) . '\'';
         }
 
-        return new dcRecord($this->con->select($strReq));
+        return new MetaRecord($this->con->select($strReq));
     }
 
     public function getClass($id)
@@ -79,7 +86,7 @@ class dcCarnaval
 
         $strReq = 'SELECT MAX(class_id) FROM ' . $this->table;
 
-        $rs            = new dcRecord($this->con->select($strReq));
+        $rs            = new MetaRecord($this->con->select($strReq));
         $cur->class_id = (int) $rs->f(0) + 1;
         $cur->insert();
 

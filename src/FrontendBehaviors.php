@@ -1,46 +1,23 @@
 <?php
+/**
+ * @brief carnaval, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugins
+ *
+ * @author Franck Paul and contributors
+ *
+ * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+declare(strict_types=1);
 
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of Carnaval a plugin for Dotclear 2.
-#
-# Copyright (c) 2008-2010 Osku and contributors
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
+namespace Dotclear\Plugin\carnaval;
 
-use Dotclear\Helper\Html\Html;
+use dcCore;
 
-if (dcCore::app()->blog->settings->carnaval->carnaval_active) {
-    dcCore::app()->tpl->addValue('CommentIfMe', ['publicCarnaval','CommentIfMe']);
-
-    if (dcCore::app()->blog->settings->carnaval->carnaval_colors) {
-        dcCore::app()->addBehavior('publicHeadContent', ['publicCarnaval','publicHeadContent']);
-    }
-}
-
-class publicCarnaval
+class FrontendBehaviors
 {
-    public static function CommentIfMe($attr)
-    {
-        $ret = $attr['return'] ?? 'me';
-        $ret = Html::escapeHTML($ret);
-
-        return
-        '<?php if (dcCore::app()->ctx->comments->isMe()) { ' .
-        "echo '" . addslashes($ret) . "'; } " .
-        'echo publicCarnaval::getCommentClass(); ?>';
-    }
-
-    public static function getCommentClass()
-    {
-        $classe_perso = dcCore::app()->carnaval->getCommentClass(dcCore::app()->ctx->comments->getEmail(false));
-
-        return Html::escapeHTML($classe_perso);
-    }
-
     public static function publicHeadContent()
     {
         echo '<style type="text/css">' . "\n" . self::carnavalStyleHelper() . "\n</style>\n";
@@ -82,9 +59,9 @@ class publicCarnaval
 
     protected static function backgroundImg(&$css, $selector, $value, $image)
     {
-        $file = carnavalConfig::imagesPath() . '/' . $image;
+        $file = CoreHelper::imagesPath() . '/' . $image;
         if ($value && file_exists($file)) {
-            $css[$selector]['background-image'] = 'url(' . carnavalConfig::imagesURL() . '/' . $image . ')';
+            $css[$selector]['background-image'] = 'url(' . CoreHelper::imagesURL() . '/' . $image . ')';
         }
     }
 }

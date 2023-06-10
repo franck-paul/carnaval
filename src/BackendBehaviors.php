@@ -1,40 +1,22 @@
 <?php
+/**
+ * @brief carnaval, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugins
+ *
+ * @author Franck Paul and contributors
+ *
+ * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+declare(strict_types=1);
 
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of Carnaval a plugin for Dotclear 2.
-#
-# Copyright (c) 2008-2010 Osku and contributors
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
-if (!defined('DC_CONTEXT_ADMIN')) {
-    return;
-}
+namespace Dotclear\Plugin\carnaval;
 
-dcCore::app()->addBehaviors([
-    'exportFullV2'   => ['carnavalBehaviors','exportFull'],
-    'exportSingleV2' => ['carnavalBehaviors','exportSingle'],
-    'importInitV2'   => ['carnavalBehaviors','importInit'],
-    'importFullV2'   => ['carnavalBehaviors','importFull'],
-    'importSingleV2' => ['carnavalBehaviors','importSingle'],
-]);
+use dcCore;
 
-dcCore::app()->menu[dcAdmin::MENU_PLUGINS]->addItem(
-    __('Carnaval'),
-    'plugin.php?p=carnaval',
-    'index.php?pf=carnaval/icon.png',
-    preg_match('/plugin.php\?p=carnaval(&.*)?$/', $_SERVER['REQUEST_URI']),
-    dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
-        dcAuth::PERMISSION_USAGE,
-        dcAuth::PERMISSION_CONTENT_ADMIN,
-    ]), dcCore::app()->blog->id)
-);
-
-# Behaviors
-class carnavalBehaviors
+class BackendBehaviors
 {
     public static function exportFull($exp)
     {
@@ -55,7 +37,7 @@ class carnavalBehaviors
     public static function importInit($bk)
     {
         $bk->cur_alias = dcCore::app()->con->openCursor(dcCore::app()->prefix . 'carnaval');
-        $bk->carnaval  = new dcCarnaval();
+        $bk->carnaval  = new Carnaval();
         $bk->classes   = $bk->carnaval->getClasses();
     }
 

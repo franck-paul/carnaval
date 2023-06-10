@@ -1,20 +1,25 @@
 <?php
+/**
+ * @brief carnaval, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugins
+ *
+ * @author Franck Paul and contributors
+ *
+ * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+declare(strict_types=1);
 
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of Carnaval a plugin for Dotclear 2.
-#
-# Copyright (c) 2008-2010 Osku and contributors
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
+namespace Dotclear\Plugin\carnaval;
 
+use dcCore;
 use Dotclear\Helper\File\Files;
 use Dotclear\Helper\File\Path;
+use Exception;
 
-class carnavalConfig
+class CoreHelper
 {
     public static function adjustColor($c)
     {
@@ -86,10 +91,10 @@ class carnavalConfig
             throw new Exception(__('Unable to create images.'));
         }
 
-        $blowupConfigRoot = dcCore::app()->plugins->moduleInfo('blowupConfig', 'root');
+        $blowupConfigRoot = My::path();
 
-        $comment_t = $blowupConfigRoot . '/alpha-img/comment-t.png';
-        $comment_b = $blowupConfigRoot . '/alpha-img/comment-b.png';
+        $comment_t = $blowupConfigRoot . '/img/comment-t.png';
+        $comment_b = $blowupConfigRoot . '/img/comment-b.png';
 
         $cval_comment_t = $name . '-comment-t.png';
         $cval_comment_b = $name . '-comment-b.png';
@@ -134,7 +139,7 @@ class carnavalConfig
     public static function dropImage($img)
     {
         $img = Path::real(self::imagesPath() . '/' . $img);
-        if (is_writable(dirname($img))) {
+        if ($img && is_writable(dirname($img))) {
             @unlink($img);
             @unlink(dirname($img) . '/.' . basename($img, '.png') . '_sq.jpg');
             @unlink(dirname($img) . '/.' . basename($img, '.png') . '_m.jpg');
