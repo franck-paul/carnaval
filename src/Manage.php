@@ -18,7 +18,6 @@ use dcCore;
 use dcNsProcess;
 use dcPage;
 use Dotclear\Helper\Html\Html;
-use Dotclear\Helper\Network\Http;
 use Dotclear\Helper\Text;
 use Exception;
 use form;
@@ -73,7 +72,7 @@ class Manage extends dcNsProcess
                     }
 
                     dcPage::addSuccessNotice(__('CSS Class has been successfully updated.'));
-                    Http::redirect(dcCore::app()->admin->getPageURL());
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
                 } catch (Exception $e) {
                     dcCore::app()->error->add($e->getMessage());
                 }
@@ -91,7 +90,7 @@ class Manage extends dcNsProcess
                     }
 
                     dcPage::addSuccessNotice(__('Class has been successfully created.'));
-                    Http::redirect(dcCore::app()->admin->getPageURL());
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
                 } catch (Exception $e) {
                     dcCore::app()->admin->add_carnaval = true;
                     dcCore::app()->error->add($e->getMessage());
@@ -113,7 +112,7 @@ class Manage extends dcNsProcess
 
             if (!dcCore::app()->error->flag()) {
                 dcPage::addSuccessNotice(__('Classes have been successfully removed.'));
-                Http::redirect(dcCore::app()->admin->getPageURL());
+                dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
             }
         }
 
@@ -129,7 +128,7 @@ class Manage extends dcNsProcess
                 dcCore::app()->blog->triggerBlog();
 
                 dcPage::addSuccessNotice(__('Configuration successfully updated.'));
-                Http::redirect(dcCore::app()->admin->getPageURL());
+                dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
             } catch (Exception $e) {
                 dcCore::app()->error->add($e->getMessage());
             }
