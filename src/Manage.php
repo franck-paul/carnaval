@@ -24,7 +24,10 @@ use form;
 
 class Manage extends dcNsProcess
 {
-    protected static $init = false; /** @deprecated since 2.27 */
+    private static bool $can_write_images = false;
+    private static bool $add_carnaval     = false;
+    protected static $init                = false; /** @deprecated since 2.27 */
+
     /**
      * Initializes the page.
      */
@@ -46,8 +49,8 @@ class Manage extends dcNsProcess
 
         $settings = dcCore::app()->blog->settings->get(My::id());
 
-        dcCore::app()->admin->can_write_images = CoreHelper::canWriteImages();
-        dcCore::app()->admin->add_carnaval     = false;
+        self::$can_write_images = CoreHelper::canWriteImages();
+        self::$add_carnaval     = false;
 
         if (!empty($_POST['carnaval_class'])) {
             $comment_author           = $_POST['comment_author'];
@@ -68,7 +71,7 @@ class Manage extends dcNsProcess
                         $comment_background_color,
                         $comment_class
                     );
-                    if (dcCore::app()->admin->can_write_images) {
+                    if (self::$can_write_images) {
                         CoreHelper::createImages($comment_background_color, $comment_class);
                     }
 
@@ -86,14 +89,14 @@ class Manage extends dcNsProcess
                         $comment_background_color,
                         $comment_class
                     );
-                    if (dcCore::app()->admin->can_write_images) {
+                    if (self::$can_write_images) {
                         CoreHelper::createImages($comment_background_color, $comment_class);
                     }
 
                     dcPage::addSuccessNotice(__('Class has been successfully created.'));
                     dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
                 } catch (Exception $e) {
-                    dcCore::app()->admin->add_carnaval = true;
+                    self::$add_carnaval = true;
                     dcCore::app()->error->add($e->getMessage());
                 }
             }
@@ -162,9 +165,9 @@ class Manage extends dcNsProcess
             if (!empty($_REQUEST['id'])) {
                 $rs = dcCore::app()->carnaval ->getClass($_REQUEST['id']);
 
-                dcCore::app()->admin->add_carnaval = true;
-                $legend                            = __('Edit CSS Class');
-                $button                            = __('update');
+                self::$add_carnaval = true;
+                $legend             = __('Edit CSS Class');
+                $button             = __('update');
 
                 $comment_author           = $rs->comment_author;
                 $comment_author_mail      = $rs->comment_author_mail;
@@ -191,7 +194,7 @@ class Manage extends dcNsProcess
         dcPage::cssModuleLoad(My::id() . '/css/style.css') .
         dcPage::jsJson('carnaval', ['delete_records' => __('Are you sure you want to delete selected CSS Classes ?')]);
 
-        if (!dcCore::app()->admin->add_carnaval) {
+        if (!self::$add_carnaval) {
             $head .= dcPage::jsModuleLoad(My::id() . '/js/form.js');
         }
 
@@ -259,7 +262,7 @@ class Manage extends dcNsProcess
             '</p></div></fieldset></form>';
         }
 
-        if (!dcCore::app()->admin->add_carnaval) {
+        if (!self::$add_carnaval) {
             echo '<div id="new-class"><h3><a class="new" id="carnaval-control" href="#">' .
             __('New CSS class') . '</a></h3></div>';
         }
