@@ -15,27 +15,25 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\carnaval;
 
 use dcCore;
-use dcNsProcess;
-use dcPage;
+use Dotclear\Core\Backend\Notices;
+use Dotclear\Core\Backend\Page;
+use Dotclear\Core\Process;
 use Dotclear\Helper\Html\Html;
 use Dotclear\Helper\Text;
 use Exception;
 use form;
 
-class Manage extends dcNsProcess
+class Manage extends Process
 {
     private static bool $can_write_images = false;
     private static bool $add_carnaval     = false;
-    protected static $init                = false; /** @deprecated since 2.27 */
 
     /**
      * Initializes the page.
      */
     public static function init(): bool
     {
-        static::$init = My::checkContext(My::MANAGE);
-
-        return static::$init;
+        return self::status(My::checkContext(My::MANAGE));
     }
 
     /**
@@ -43,7 +41,7 @@ class Manage extends dcNsProcess
      */
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
@@ -75,8 +73,8 @@ class Manage extends dcNsProcess
                         CoreHelper::createImages($comment_background_color, $comment_class);
                     }
 
-                    dcPage::addSuccessNotice(__('CSS Class has been successfully updated.'));
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
+                    Notices::addSuccessNotice(__('CSS Class has been successfully updated.'));
+                    dcCore::app()->admin->url->redirect('admin.plugin.' . My::id());
                 } catch (Exception $e) {
                     dcCore::app()->error->add($e->getMessage());
                 }
@@ -93,8 +91,8 @@ class Manage extends dcNsProcess
                         CoreHelper::createImages($comment_background_color, $comment_class);
                     }
 
-                    dcPage::addSuccessNotice(__('Class has been successfully created.'));
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
+                    Notices::addSuccessNotice(__('Class has been successfully created.'));
+                    dcCore::app()->admin->url->redirect('admin.plugin.' . My::id());
                 } catch (Exception $e) {
                     self::$add_carnaval = true;
                     dcCore::app()->error->add($e->getMessage());
@@ -115,8 +113,8 @@ class Manage extends dcNsProcess
             }
 
             if (!dcCore::app()->error->flag()) {
-                dcPage::addSuccessNotice(__('Classes have been successfully removed.'));
-                dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
+                Notices::addSuccessNotice(__('Classes have been successfully removed.'));
+                dcCore::app()->admin->url->redirect('admin.plugin.' . My::id());
             }
         }
 
@@ -131,8 +129,8 @@ class Manage extends dcNsProcess
 
                 dcCore::app()->blog->triggerBlog();
 
-                dcPage::addSuccessNotice(__('Configuration successfully updated.'));
-                dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
+                Notices::addSuccessNotice(__('Configuration successfully updated.'));
+                dcCore::app()->admin->url->redirect('admin.plugin.' . My::id());
             } catch (Exception $e) {
                 dcCore::app()->error->add($e->getMessage());
             }
@@ -146,7 +144,7 @@ class Manage extends dcNsProcess
      */
     public static function render(): void
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return;
         }
 
@@ -189,24 +187,23 @@ class Manage extends dcNsProcess
             dcCore::app()->error->add($e->getMessage());
         }
 
-        $head = dcPage::jsColorPicker() .
-        dcPage::jsModuleLoad(My::id() . '/js/admin.js') .
-        dcPage::cssModuleLoad(My::id() . '/css/style.css') .
-        dcPage::jsJson('carnaval', ['delete_records' => __('Are you sure you want to delete selected CSS Classes ?')]);
+        $head = My::jsLoad('admin.js') .
+        My::cssLoad('style.css') .
+        Page::jsJson('carnaval', ['delete_records' => __('Are you sure you want to delete selected CSS Classes ?')]);
 
         if (!self::$add_carnaval) {
-            $head .= dcPage::jsModuleLoad(My::id() . '/js/form.js');
+            $head .= My::jsLoad('form.js');
         }
 
-        dcPage::openModule(__('Carnaval'), $head);
+        Page::openModule(__('Carnaval'), $head);
 
-        echo dcPage::breadcrumb(
+        echo Page::breadcrumb(
             [
                 Html::escapeHTML(dcCore::app()->blog->name) => '',
                 __('Carnaval')                              => '',
             ]
         );
-        echo dcPage::notices();
+        echo Notices::getNotices();
 
         // Form
         echo
@@ -290,8 +287,8 @@ class Manage extends dcNsProcess
         echo
         '<input type="submit" name="carnaval_class" accesskey="a" value="' . $button . '" tabindex="6" /></fieldset></form>';
 
-        dcPage::helpBlock('carnaval');
+        Page::helpBlock('carnaval');
 
-        dcPage::closeModule();
+        Page::closeModule();
     }
 }

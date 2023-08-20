@@ -14,39 +14,36 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\carnaval;
 
-use dcAdmin;
 use dcCore;
-use dcNsProcess;
+use Dotclear\Core\Backend\Menus;
+use Dotclear\Core\Process;
 
-class Backend extends dcNsProcess
+class Backend extends Process
 {
-    protected static $init = false; /** @deprecated since 2.27 */
     public static function init(): bool
     {
-        static::$init = My::checkContext(My::BACKEND);
-
-        return static::$init;
+        return self::status(My::checkContext(My::BACKEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
         dcCore::app()->carnaval = new Carnaval();
 
         dcCore::app()->addBehaviors([
-            'exportFullV2'   => [BackendBehaviors::class, 'exportFull'],
-            'exportSingleV2' => [BackendBehaviors::class, 'exportSingle'],
-            'importInitV2'   => [BackendBehaviors::class, 'importInit'],
-            'importFullV2'   => [BackendBehaviors::class, 'importFull'],
-            'importSingleV2' => [BackendBehaviors::class, 'importSingle'],
+            'exportFullV2'   => BackendBehaviors::exportFull(...),
+            'exportSingleV2' => BackendBehaviors::exportSingle(...),
+            'importInitV2'   => BackendBehaviors::importInit(...),
+            'importFullV2'   => BackendBehaviors::importFull(...),
+            'importSingleV2' => BackendBehaviors::importSingle(...),
         ]);
 
-        dcCore::app()->menu[dcAdmin::MENU_BLOG]->addItem(
+        dcCore::app()->admin->menus[Menus::MENU_BLOG]->addItem(
             __('Carnaval'),
-            My::makeUrl(),
+            My::manageUrl(),
             My::icons(),
             preg_match(My::urlScheme(), $_SERVER['REQUEST_URI']),
             My::checkContext(My::MENU)

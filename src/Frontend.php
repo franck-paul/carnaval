@@ -15,21 +15,18 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\carnaval;
 
 use dcCore;
-use dcNsProcess;
+use Dotclear\Core\Process;
 
-class Frontend extends dcNsProcess
+class Frontend extends Process
 {
-    protected static $init = false; /** @deprecated since 2.27 */
     public static function init(): bool
     {
-        static::$init = My::checkContext(My::FRONTEND);
-
-        return static::$init;
+        return self::status(My::checkContext(My::FRONTEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
@@ -37,10 +34,10 @@ class Frontend extends dcNsProcess
 
         $settings = dcCore::app()->blog->settings->get(My::id());
         if ($settings->carnaval_active) {
-            dcCore::app()->tpl->addValue('CommentIfMe', [FrontendTemplate::class,'CommentIfMe']);
+            dcCore::app()->tpl->addValue('CommentIfMe', FrontendTemplate::CommentIfMe(...));
 
             if ($settings->carnaval_colors) {
-                dcCore::app()->addBehavior('publicHeadContent', [FrontendBehaviors::class,'publicHeadContent']);
+                dcCore::app()->addBehavior('publicHeadContent', FrontendBehaviors::publicHeadContent(...));
             }
         }
 
