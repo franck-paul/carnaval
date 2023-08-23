@@ -45,7 +45,7 @@ class Manage extends Process
             return false;
         }
 
-        $settings = dcCore::app()->blog->settings->get(My::id());
+        $settings = My::settings();
 
         self::$can_write_images = CoreHelper::canWriteImages();
         self::$add_carnaval     = false;
@@ -148,7 +148,7 @@ class Manage extends Process
             return;
         }
 
-        $settings = dcCore::app()->blog->settings->get(My::id());
+        $settings = My::settings();
 
         $comment_author = $comment_author_mail = $comment_class = $comment_text_color = $comment_background_color = '';
 
@@ -195,7 +195,7 @@ class Manage extends Process
             $head .= My::jsLoad('form.js');
         }
 
-        Page::openModule(__('Carnaval'), $head);
+        Page::openModule(My::name(), $head);
 
         echo Page::breadcrumb(
             [
@@ -212,7 +212,7 @@ class Manage extends Process
         '<label class=" classic" for="active">' . __('Enable Carnaval') . '</label></p><p class="field">' .
         form::checkbox('colors', 1, $colors) .
         '<label class=" classic" for="colors">' . __('Use defined colors') . '</label></p><p>' . form::hidden(['p'], 'carnaval') .
-        dcCore::app()->formNonce() .
+        My::parsedHiddenFields() .
         '<input type="submit" name="saveconfig" accesskey="s" value="' . __('Save configuration') . '"/>' .
         '</p>' .
         '</fieldset></form>';
@@ -253,8 +253,9 @@ class Manage extends Process
             '<div class="two-cols">' .
             '<p class="col checkboxes-helpers"></p>' .
             '<p class="col right">' .
-                form::hidden(['p'], 'carnaval') .
-                dcCore::app()->formNonce() .
+                My::parsedHiddenFields([
+                    'p' => 'carnaval',
+                ]) .
                 '<input type="submit" class="delete" name="removeaction" accesskey="d" value="' . __('delete') . '" onclick="return window.confirm(dotclear.msg.delete_records)" />' .
             '</p></div></fieldset></form>';
         }
@@ -277,8 +278,9 @@ class Manage extends Process
         '</label></p><p class="field"><label class="classic">' . __('Background color:') .
         form::field('comment_background_color', 7, 7, Html::escapeHTML($comment_background_color), 'colorpicker', '7') .
         '</label></p>' .
-        form::hidden(['p'], 'carnaval') .
-        dcCore::app()->formNonce();
+        My::parsedHiddenFields([
+            'p' => 'carnaval',
+        ]);
 
         if (!empty($_REQUEST['id'])) {
             echo form::hidden('id', $_REQUEST['id']);

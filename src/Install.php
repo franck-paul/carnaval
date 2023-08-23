@@ -53,7 +53,7 @@ class Install extends Process
             $current_structure = new Structure(dcCore::app()->con, dcCore::app()->prefix);
             $current_structure->synchronize($new_structure);
 
-            $settings = dcCore::app()->blog->settings->get(My::id());
+            $settings = My::settings();
             $settings->put('carnaval_active', false, dcNamespace::NS_BOOL, 'Carnaval activation flag', false, true);
             $settings->put('carnaval_colors', false, dcNamespace::NS_BOOL, 'Use colors defined with Carnaval plugin', false, true);
         } catch (Exception $e) {

@@ -41,13 +41,7 @@ class Backend extends Process
             'importSingleV2' => BackendBehaviors::importSingle(...),
         ]);
 
-        dcCore::app()->admin->menus[Menus::MENU_BLOG]->addItem(
-            __('Carnaval'),
-            My::manageUrl(),
-            My::icons(),
-            preg_match(My::urlScheme(), $_SERVER['REQUEST_URI']),
-            My::checkContext(My::MENU)
-        );
+        My::addBackendMenuItem(Menus::MENU_BLOG);
 
         return true;
     }

@@ -32,7 +32,7 @@ class Frontend extends Process
 
         dcCore::app()->carnaval = new Carnaval();
 
-        $settings = dcCore::app()->blog->settings->get(My::id());
+        $settings = My::settings();
         if ($settings->carnaval_active) {
             dcCore::app()->tpl->addValue('CommentIfMe', FrontendTemplate::CommentIfMe(...));
 
