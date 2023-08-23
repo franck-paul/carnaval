@@ -14,7 +14,7 @@ $this->registerModule(
     'Carnaval',
     'Identify comments',
     'Osku and contributors',
-    '3.2',
+    '4.0',
     [
         'requires'    => [['core', '2.27'], ['php', '8.1']],
         'permissions' => dcCore::app()->auth->makePermissions([
