@@ -74,7 +74,7 @@ class Manage extends Process
                     }
 
                     Notices::addSuccessNotice(__('CSS Class has been successfully updated.'));
-                    dcCore::app()->admin->url->redirect('admin.plugin.' . My::id());
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
                 } catch (Exception $e) {
                     dcCore::app()->error->add($e->getMessage());
                 }
@@ -92,7 +92,7 @@ class Manage extends Process
                     }
 
                     Notices::addSuccessNotice(__('Class has been successfully created.'));
-                    dcCore::app()->admin->url->redirect('admin.plugin.' . My::id());
+                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
                 } catch (Exception $e) {
                     self::$add_carnaval = true;
                     dcCore::app()->error->add($e->getMessage());
@@ -102,7 +102,7 @@ class Manage extends Process
 
         // Delete CSS Class
         if (!empty($_POST['removeaction']) && !empty($_POST['select'])) {
-            foreach ($_POST['select'] as $k => $v) {
+            foreach ($_POST['select'] as $v) {
                 try {
                     dcCore::app()->carnaval ->delClass($v);
                 } catch (Exception $e) {
@@ -114,7 +114,7 @@ class Manage extends Process
 
             if (!dcCore::app()->error->flag()) {
                 Notices::addSuccessNotice(__('Classes have been successfully removed.'));
-                dcCore::app()->admin->url->redirect('admin.plugin.' . My::id());
+                dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
             }
         }
 
@@ -130,7 +130,7 @@ class Manage extends Process
                 dcCore::app()->blog->triggerBlog();
 
                 Notices::addSuccessNotice(__('Configuration successfully updated.'));
-                dcCore::app()->admin->url->redirect('admin.plugin.' . My::id());
+                dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
             } catch (Exception $e) {
                 dcCore::app()->error->add($e->getMessage());
             }

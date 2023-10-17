@@ -16,16 +16,21 @@ namespace Dotclear\Plugin\carnaval;
 
 use dcCore;
 use Dotclear\Database\MetaRecord;
+use Dotclear\Interface\Core\BlogInterface;
+use Dotclear\Interface\Core\ConnectionInterface;
 use Exception;
 
 class Carnaval
 {
     public const CARNAVAL_TABLE_NAME = 'carnaval';
 
-    public $found;	// Avoid multiple SQL requests
+    /**
+     * @var array<string, mixed>
+     */
+    public array $found;    // Avoid multiple SQL requests
 
-    private $blog;
-    private $con;
+    private BlogInterface $blog;
+    private ConnectionInterface $con;
     private string $table;
 
     public function __construct()
@@ -40,7 +45,14 @@ class Carnaval
         ];
     }
 
-    public function getClasses($params = [])
+    /**
+     * Gets the classes.
+     *
+     * @param      array<string, mixed>       $params  The parameters
+     *
+     * @return     MetaRecord  The classes.
+     */
+    public function getClasses(array $params = []): MetaRecord
     {
         $strReq = 'SELECT class_id, comment_author, comment_author_mail, comment_class,  ' .
             'comment_text_color, comment_background_color ' .
@@ -59,12 +71,30 @@ class Carnaval
         return new MetaRecord($this->con->select($strReq));
     }
 
-    public function getClass($id)
+    /**
+     * Gets the class.
+     *
+     * @param      string      $id     The identifier
+     *
+     * @return     MetaRecord  The class.
+     */
+    public function getClass(string $id): MetaRecord
     {
         return $this->getClasses(['class_id' => $id]);
     }
 
-    public function addClass($author, $mail, $text, $backg, $class)
+    /**
+     * Adds a class.
+     *
+     * @param      mixed      $author  The author
+     * @param      mixed      $mail    The mail
+     * @param      mixed      $text    The text
+     * @param      mixed      $backg   The backg
+     * @param      mixed      $class   The class
+     *
+     * @throws     Exception
+     */
+    public function addClass($author, $mail, $text, $backg, $class): void
     {
         $cur                           = $this->con->openCursor($this->table);
         $cur->blog_id                  = (string) $this->blog->id;
@@ -93,7 +123,7 @@ class Carnaval
         $this->blog->triggerBlog();
     }
 
-    public function updateClass($id, $author, $mail = '', $text = '', $backg = '', $class = '')
+    public function updateClass(string $id, string $author, string $mail = '', string $text = '', string $backg = '', string $class = ''): void
     {
         $cur = $this->con->openCursor($this->table);
 
@@ -118,7 +148,7 @@ class Carnaval
         $this->blog->triggerBlog();
     }
 
-    public function delClass($id)
+    public function delClass(string $id): void
     {
         $id = (int) $id;
 
@@ -130,13 +160,14 @@ class Carnaval
         $this->blog->triggerBlog();
     }
 
-    public function getCommentClass($mail)
+    public function getCommentClass(string $mail): string
     {
         if (isset($this->found['comments'][$mail])) {
             return $this->found['comments'][$mail];
         }
 
-        $rs                             = $this->getClasses(['mail' => $mail]);
+        $rs = $this->getClasses(['mail' => $mail]);
+
         $this->found['comments'][$mail] = $rs->isEmpty() ? '' : ' ' . $rs->comment_class;
 
         return $this->found['comments'][$mail];

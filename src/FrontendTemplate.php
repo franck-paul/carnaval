@@ -14,13 +14,19 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\carnaval;
 
+use ArrayObject;
 use dcCore;
 
 use Dotclear\Helper\Html\Html;
 
 class FrontendTemplate
 {
-    public static function CommentIfMe($attr)
+    /**
+     * @param      array<string, mixed>|\ArrayObject<string, mixed>  $attr      The attribute
+     *
+     * @return     string
+     */
+    public static function CommentIfMe(array|ArrayObject $attr): string
     {
         $ret = $attr['return'] ?? 'me';
         $ret = Html::escapeHTML($ret);
@@ -31,7 +37,7 @@ class FrontendTemplate
         'echo ' . self::class . '::getCommentClass(); ?>';
     }
 
-    public static function getCommentClass()
+    public static function getCommentClass(): string
     {
         $classe_perso = dcCore::app()->carnaval->getCommentClass(dcCore::app()->ctx->comments->getEmail(false));
 

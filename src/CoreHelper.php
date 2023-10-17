@@ -21,7 +21,14 @@ use Exception;
 
 class CoreHelper
 {
-    public static function adjustColor($c)
+    /**
+     * Check a CSS color
+     *
+     * @param  null|string  $c  CSS color
+     *
+     * @return string    checked CSS color
+     */
+    public static function adjustColor(?string $c): string
     {
         if ($c === '') {
             return '';
@@ -44,17 +51,20 @@ class CoreHelper
         return '';
     }
 
-    public static function imagesPath()
+    /**
+     * @return     false|string
+     */
+    public static function imagesPath(): string|bool
     {
         return Path::real(dcCore::app()->blog->public_path) . '/carnaval-images';
     }
 
-    public static function imagesURL()
+    public static function imagesURL(): string
     {
         return dcCore::app()->blog->settings->system->public_url . '/carnaval-images';
     }
 
-    public static function canWriteImages($create = false)
+    public static function canWriteImages(bool $create = false): bool
     {
         $public = Path::real(dcCore::app()->blog->public_path);
         $imgs   = self::imagesPath();
@@ -85,7 +95,7 @@ class CoreHelper
         return true;
     }
 
-    public static function createImages($color, $name)
+    public static function createImages(string $color, string $name): void
     {
         if (!self::canWriteImages(true)) {
             throw new Exception(__('Unable to create images.'));
@@ -107,7 +117,7 @@ class CoreHelper
         self::commentImages($color, $comment_t, $comment_b, $cval_comment_t, $cval_comment_b);
     }
 
-    protected static function commentImages($comment_color, $comment_t, $comment_b, $dest_t, $dest_b)
+    protected static function commentImages(string $comment_color, string $comment_t, string $comment_b, string $dest_t, string $dest_b): void
     {
         $comment_color = sscanf($comment_color, '#%2X%2X%2X');
 
@@ -136,7 +146,7 @@ class CoreHelper
         imagedestroy($s_comment_b);
     }
 
-    public static function dropImage($img)
+    public static function dropImage(string $img): void
     {
         $img = Path::real(self::imagesPath() . '/' . $img);
         if ($img && is_writable(dirname($img))) {

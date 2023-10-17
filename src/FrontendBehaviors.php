@@ -18,12 +18,14 @@ use dcCore;
 
 class FrontendBehaviors
 {
-    public static function publicHeadContent()
+    public static function publicHeadContent(): string
     {
         echo '<style type="text/css">' . "\n" . self::carnavalStyleHelper() . "\n</style>\n";
+
+        return '';
     }
 
-    public static function carnavalStyleHelper()
+    public static function carnavalStyleHelper(): string
     {
         $cval = dcCore::app()->carnaval->getClasses();
         $css  = [];
@@ -50,14 +52,28 @@ class FrontendBehaviors
         return $res;
     }
 
-    protected static function prop(&$css, $selector, $prop, $value)
+    /**
+     * Store CSS property value in associated array
+     *
+     * @param  array<string, array<string, string>>     $css      CSS associated array
+     * @param  string                                   $selector selector
+     * @param  string                                   $prop     property
+     * @param  mixed                                    $value    value
+     */
+    protected static function prop(array &$css, string $selector, string $prop, $value): void
     {
         if ($value) {
             $css[$selector][$prop] = $value;
         }
     }
 
-    protected static function backgroundImg(&$css, $selector, $value, $image)
+    /**
+     * @param  array<string, array<string, string>>     $css      CSS associated array
+     * @param  string                                   $selector selector
+     * @param  mixed                                    $value    value
+     * @param  string                                   $image    image
+     */
+    protected static function backgroundImg(array &$css, string $selector, $value, string $image): void
     {
         $file = CoreHelper::imagesPath() . '/' . $image;
         if ($value && file_exists($file)) {
