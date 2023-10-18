@@ -69,6 +69,10 @@ class CoreHelper
         $public = Path::real(dcCore::app()->blog->public_path);
         $imgs   = self::imagesPath();
 
+        if ($public === false) {
+            return false;
+        }
+
         if (!function_exists('imagecreatetruecolor') || !function_exists('imagepng') || !function_exists('imagecreatefrompng')) {
             return false;
         }
@@ -77,7 +81,7 @@ class CoreHelper
             return false;
         }
 
-        if (!is_dir($imgs)) {
+        if ($imgs !== false && !is_dir($imgs)) {
             if (!is_writable($public)) {
                 return false;
             }
@@ -88,7 +92,7 @@ class CoreHelper
             return true;
         }
 
-        if (!is_writable($imgs)) {
+        if ($imgs === false || !is_writable($imgs)) {
             return false;
         }
 
@@ -122,10 +126,20 @@ class CoreHelper
         $comment_color = sscanf($comment_color, '#%2X%2X%2X');
 
         $d_comment_t = imagecreatetruecolor(500, 25);
-        $fill        = imagecolorallocate($d_comment_t, $comment_color[0], $comment_color[1], $comment_color[2]);
-        imagefill($d_comment_t, 0, 0, $fill);
+        if ($d_comment_t === false) {
+            return;
+        }
+
+        $fill = imagecolorallocate($d_comment_t, $comment_color[0], $comment_color[1], $comment_color[2]);
+        imagefill($d_comment_t, 0, 0, (int) $fill);
 
         $s_comment_t = imagecreatefrompng($comment_t);
+        if ($s_comment_t === false) {
+            imagedestroy($d_comment_t);
+
+            return;
+        }
+
         imagealphablending($s_comment_t, true);
         imagecopy($d_comment_t, $s_comment_t, 0, 0, 0, 0, 500, 25);
 
@@ -134,16 +148,26 @@ class CoreHelper
         imagedestroy($s_comment_t);
 
         $d_comment_b = imagecreatetruecolor(500, 7);
-        $fill        = imagecolorallocate($d_comment_b, $comment_color[0], $comment_color[1], $comment_color[2]);
-        imagefill($d_comment_b, 0, 0, $fill);
+        if ($d_comment_b === false) {
+            return;
+        }
+
+        $fill = imagecolorallocate($d_comment_b, $comment_color[0], $comment_color[1], $comment_color[2]);
+        imagefill($d_comment_b, 0, 0, (int) $fill);
 
         $s_comment_b = imagecreatefrompng($comment_b);
+        if ($s_comment_b === false) {
+            imagedestroy($d_comment_b);
+
+            return;
+        }
+
         imagealphablending($s_comment_b, true);
         imagecopy($d_comment_b, $s_comment_b, 0, 0, 0, 0, 500, 7);
+        imagedestroy($s_comment_b);
 
         imagepng($d_comment_b, self::imagesPath() . '/' . $dest_b);
         imagedestroy($d_comment_b);
-        imagedestroy($s_comment_b);
     }
 
     public static function dropImage(string $img): void

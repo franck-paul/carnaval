@@ -30,7 +30,7 @@ class Carnaval
     public array $found;    // Avoid multiple SQL requests
 
     private BlogInterface $blog;
-    private ConnectionInterface $con;
+    private ?ConnectionInterface $con;
     private string $table;
 
     public function __construct()
@@ -57,7 +57,7 @@ class Carnaval
         $strReq = 'SELECT class_id, comment_author, comment_author_mail, comment_class,  ' .
             'comment_text_color, comment_background_color ' .
             'FROM ' . $this->table . ' ' .
-            "WHERE blog_id = '" . $this->con->escape($this->blog->id) . "' ";
+            "WHERE blog_id = '" . $this->con->escapeStr($this->blog->id) . "' ";
 
         if (isset($params['class_id'])) {
             $strReq .= 'AND class_id = ' . (int) $params['class_id'] . ' ';
@@ -65,7 +65,7 @@ class Carnaval
         if (isset($params['mail'])) {
             $strReq .= 'AND comment_author_mail <> \'\' ' .
                 'AND comment_author_mail = \'' .
-                $this->con->escape($params['mail']) . '\'';
+                $this->con->escapeStr($params['mail']) . '\'';
         }
 
         return new MetaRecord($this->con->select($strReq));
@@ -143,7 +143,7 @@ class Carnaval
         }
 
         $cur->update('WHERE class_id = ' . (int) $id .
-            " AND blog_id = '" . $this->con->escape($this->blog->id) . "'");
+            " AND blog_id = '" . $this->con->escapeStr($this->blog->id) . "'");
 
         $this->blog->triggerBlog();
     }
@@ -153,7 +153,7 @@ class Carnaval
         $id = (int) $id;
 
         $strReq = 'DELETE FROM ' . $this->table . ' ' .
-                "WHERE blog_id = '" . $this->con->escape($this->blog->id) . "' " .
+                "WHERE blog_id = '" . $this->con->escapeStr($this->blog->id) . "' " .
                 'AND class_id = ' . $id . ' ';
 
         $this->con->execute($strReq);
