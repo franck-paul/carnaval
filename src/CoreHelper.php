@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\carnaval;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Helper\File\Files;
 use Dotclear\Helper\File\Path;
 use Exception;
@@ -30,7 +30,7 @@ class CoreHelper
      */
     public static function adjustColor(?string $c): string
     {
-        if ($c === '') {
+        if (is_null($c) || $c === '') {
             return '';
         }
 
@@ -56,17 +56,17 @@ class CoreHelper
      */
     public static function imagesPath(): string|bool
     {
-        return Path::real(dcCore::app()->blog->public_path) . '/carnaval-images';
+        return Path::real(App::blog()->publicPath()) . '/carnaval-images';
     }
 
     public static function imagesURL(): string
     {
-        return dcCore::app()->blog->settings->system->public_url . '/carnaval-images';
+        return App::blog()->settings()->system->public_url . '/carnaval-images';
     }
 
     public static function canWriteImages(bool $create = false): bool
     {
-        $public = Path::real(dcCore::app()->blog->public_path);
+        $public = Path::real(App::blog()->publicPath());
         $imgs   = self::imagesPath();
 
         if ($public === false) {
@@ -123,6 +123,9 @@ class CoreHelper
 
     protected static function commentImages(string $comment_color, string $comment_t, string $comment_b, string $dest_t, string $dest_b): void
     {
+        /**
+         * @var  array<int, int>
+         */
         $comment_color = sscanf($comment_color, '#%2X%2X%2X');
 
         $d_comment_t = imagecreatetruecolor(500, 25);

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\carnaval;
 
 use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Backend\Notices;
 use Dotclear\Core\Backend\Page;
 use Dotclear\Core\Process;
@@ -127,7 +128,7 @@ class Manage extends Process
                 $settings->put('carnaval_active', $active, 'boolean', 'Carnaval activation flag');
                 $settings->put('carnaval_colors', $colors, 'boolean', 'Use colors defined with Carnaval plugin');
 
-                dcCore::app()->blog->triggerBlog();
+                App::blog()->triggerBlog();
 
                 Notices::addSuccessNotice(__('Configuration successfully updated.'));
                 dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
@@ -199,8 +200,8 @@ class Manage extends Process
 
         echo Page::breadcrumb(
             [
-                Html::escapeHTML(dcCore::app()->blog->name) => '',
-                __('Carnaval')                              => '',
+                Html::escapeHTML(App::blog()->name()) => '',
+                __('Carnaval')                        => '',
             ]
         );
         echo Notices::getNotices();

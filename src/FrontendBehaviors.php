@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\carnaval;
 
 use dcCore;
+use Dotclear\App;
 
 class FrontendBehaviors
 {
@@ -36,7 +37,7 @@ class FrontendBehaviors
             $cl_backg = $cval->comment_background_color;
             self::prop($css, '#comments dd.' . $cl_class, 'color', $cl_txt);
             self::prop($css, '#comments dd.' . $cl_class, 'background-color', $cl_backg);
-            if (dcCore::app()->blog->settings->system->theme == 'blowup') {
+            if (App::blog()->settings()->system->theme == 'blowup') {
                 self::backgroundImg($css, '#comments dt.' . $cl_class, $cl_backg, $cl_class . '-comment-t.png');
                 self::backgroundImg($css, '#comments dd.' . $cl_class, $cl_backg, $cl_class . '-comment-b.png');
             }

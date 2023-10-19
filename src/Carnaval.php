@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\carnaval;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Database\MetaRecord;
 use Dotclear\Interface\Core\BlogInterface;
 use Dotclear\Interface\Core\ConnectionInterface;
@@ -30,15 +30,15 @@ class Carnaval
     public array $found;    // Avoid multiple SQL requests
 
     private BlogInterface $blog;
-    private ?ConnectionInterface $con;
+    private ConnectionInterface $con;
     private string $table;
 
     public function __construct()
     {
-        $this->blog = & dcCore::app()->blog;
+        $this->blog = App::blog();
 
-        $this->con   = $this->blog->con;
-        $this->table = $this->blog->prefix . self::CARNAVAL_TABLE_NAME;
+        $this->con   = App::con();
+        $this->table = App::con()->prefix() . self::CARNAVAL_TABLE_NAME;
 
         $this->found = [
             'comments' => [],
