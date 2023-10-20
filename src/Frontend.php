@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\carnaval;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 
 class Frontend extends Process
@@ -30,14 +30,16 @@ class Frontend extends Process
             return false;
         }
 
-        dcCore::app()->carnaval = new Carnaval();
+        App::frontend()->carnaval = new Carnaval();
 
         $settings = My::settings();
         if ($settings->carnaval_active) {
-            dcCore::app()->tpl->addValue('CommentIfMe', FrontendTemplate::CommentIfMe(...));
+            App::frontend()->template()->addValue('CommentIfMe', FrontendTemplate::CommentIfMe(...));
 
             if ($settings->carnaval_colors) {
-                dcCore::app()->addBehavior('publicHeadContent', FrontendBehaviors::publicHeadContent(...));
+                App::behavior()->addBehaviors([
+                    'publicHeadContent' => FrontendBehaviors::publicHeadContent(...),
+                ]);
             }
         }
 

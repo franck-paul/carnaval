@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\carnaval;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Plugin\importExport\FlatBackupItem;
 use Dotclear\Plugin\importExport\FlatExport;
 use Dotclear\Plugin\importExport\FlatImportV2;
@@ -34,7 +34,7 @@ class BackendBehaviors
             'carnaval',
             'SELECT comment_author, comment_author_mail, comment_class, ' .
             'comment_text_color, comment_background_color ' .
-            'FROM ' . dcCore::app()->prefix . 'carnaval C ' .
+            'FROM ' . App::con()->prefix() . 'carnaval C ' .
             "WHERE C.blog_id = '" . $blog_id . "'"
         );
 
@@ -43,7 +43,7 @@ class BackendBehaviors
 
     public static function importInit(FlatImportV2 $bk): string
     {
-        $bk->cur_alias = dcCore::app()->con->openCursor(dcCore::app()->prefix . 'carnaval');    // @phpstan-ignore-line
+        $bk->cur_alias = App::con()->openCursor(App::con()->prefix() . 'carnaval');    // @phpstan-ignore-line
         $bk->carnaval  = new Carnaval();                                                        // @phpstan-ignore-line
         $bk->classes   = $bk->carnaval->getClasses();                                           // @phpstan-ignore-line
 

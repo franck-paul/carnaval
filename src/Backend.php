@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\carnaval;
 
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Backend\Menus;
 use Dotclear\Core\Process;
 
@@ -31,9 +31,9 @@ class Backend extends Process
             return false;
         }
 
-        dcCore::app()->carnaval = new Carnaval();
+        App::backend()->carnaval = new Carnaval();
 
-        dcCore::app()->addBehaviors([
+        App::behavior()->addBehaviors([
             'exportFullV2'   => BackendBehaviors::exportFull(...),
             'exportSingleV2' => BackendBehaviors::exportSingle(...),
             'importInitV2'   => BackendBehaviors::importInit(...),

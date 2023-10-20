@@ -1,20 +1,13 @@
 <?php
-
-/* -*- tab-width: 5; indent-tabs-mode: t; c-basic-offset: 5 -*- */
-/***************************************************************\
- *  This is 'Javatar', a plugin for Dotclear 2                 *
- *                                                             *
- *  Copyright (c) 2008                                         *
- *  Osku and contributors.                                     *
- *                                                             *
- *  This is an open source software, distributed under the GNU *
- *  General Public License (version 2) terms and  conditions.  *
- *                                                             *
- *  You should have received a copy of the GNU General Public  *
- *  License along with 'Javatar' (see COPYING.txt);            *
- *  if not, write to the Free Software Foundation, Inc.,       *
- *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA    *
-\***************************************************************/
-if (!isset(dcCore::app()->resources['help']['carnaval'])) {
-    dcCore::app()->resources['help']['carnaval'] = __DIR__ . '/help.html';
-}
+/**
+ * @brief Carnaval, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugins
+ *
+ * @author Osku and contributors
+ *
+ * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
+\Dotclear\App::backend()->resources()->set('help', 'carnaval', __DIR__ . '/help.html');

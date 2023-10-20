@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\carnaval;
 
-use dcCore;
 use Dotclear\App;
 use Dotclear\Core\Backend\Notices;
 use Dotclear\Core\Backend\Page;
@@ -62,7 +61,7 @@ class Manage extends Process
                 $id = $_REQUEST['id'];
 
                 try {
-                    dcCore::app()->carnaval ->updateClass(
+                    App::backend()->carnaval->updateClass(
                         $id,
                         $comment_author,
                         $comment_author_mail,
@@ -75,13 +74,13 @@ class Manage extends Process
                     }
 
                     Notices::addSuccessNotice(__('CSS Class has been successfully updated.'));
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
+                    My::redirect();
                 } catch (Exception $e) {
-                    dcCore::app()->error->add($e->getMessage());
+                    App::error()->add($e->getMessage());
                 }
             } else {
                 try {
-                    dcCore::app()->carnaval->addClass(
+                    App::backend()->carnaval->addClass(
                         $comment_author,
                         $comment_author_mail,
                         $comment_text_color,
@@ -93,10 +92,10 @@ class Manage extends Process
                     }
 
                     Notices::addSuccessNotice(__('Class has been successfully created.'));
-                    dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
+                    My::redirect();
                 } catch (Exception $e) {
                     self::$add_carnaval = true;
-                    dcCore::app()->error->add($e->getMessage());
+                    App::error()->add($e->getMessage());
                 }
             }
         }
@@ -105,17 +104,17 @@ class Manage extends Process
         if (!empty($_POST['removeaction']) && !empty($_POST['select'])) {
             foreach ($_POST['select'] as $v) {
                 try {
-                    dcCore::app()->carnaval ->delClass($v);
+                    App::backend()->carnaval->delClass($v);
                 } catch (Exception $e) {
-                    dcCore::app()->error->add($e->getMessage());
+                    App::error()->add($e->getMessage());
 
                     break;
                 }
             }
 
-            if (!dcCore::app()->error->flag()) {
+            if (!App::error()->flag()) {
                 Notices::addSuccessNotice(__('Classes have been successfully removed.'));
-                dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
+                My::redirect();
             }
         }
 
@@ -131,9 +130,9 @@ class Manage extends Process
                 App::blog()->triggerBlog();
 
                 Notices::addSuccessNotice(__('Configuration successfully updated.'));
-                dcCore::app()->adminurl->redirect('admin.plugin.' . My::id());
+                My::redirect();
             } catch (Exception $e) {
-                dcCore::app()->error->add($e->getMessage());
+                App::error()->add($e->getMessage());
             }
         }
 
@@ -162,7 +161,7 @@ class Manage extends Process
 
         try {
             if (!empty($_REQUEST['id'])) {
-                $rs = dcCore::app()->carnaval ->getClass($_REQUEST['id']);
+                $rs = App::backend()->carnaval->getClass($_REQUEST['id']);
 
                 self::$add_carnaval = true;
                 $legend             = __('Edit CSS Class');
@@ -176,16 +175,16 @@ class Manage extends Process
                 unset($rs);
             }
         } catch (Exception $e) {
-            dcCore::app()->error->add($e->getMessage());
+            App::error()->add($e->getMessage());
         }
 
         // Get CSS Classes
         $rs = null;
 
         try {
-            $rs = dcCore::app()->carnaval ->getClasses();
+            $rs = App::backend()->carnaval->getClasses();
         } catch (Exception $e) {
-            dcCore::app()->error->add($e->getMessage());
+            App::error()->add($e->getMessage());
         }
 
         $head = My::jsLoad('admin.js') .
@@ -208,7 +207,7 @@ class Manage extends Process
 
         // Form
         echo
-        '<form action="' . dcCore::app()->admin->getPageURL() . '" method="post" id="config-form"><fieldset><legend>' . __('Plugin activation') . '</legend><p class="field">' .
+        '<form action="' . App::backend()->getPageURL() . '" method="post" id="config-form"><fieldset><legend>' . __('Plugin activation') . '</legend><p class="field">' .
         form::checkbox('active', 1, $active) .
         '<label class=" classic" for="active">' . __('Enable Carnaval') . '</label></p><p class="field">' .
         form::checkbox('colors', 1, $colors) .
@@ -220,7 +219,7 @@ class Manage extends Process
 
         if (!$rs->isEmpty()) {
             echo
-            '<form class="clear" action="' . dcCore::app()->admin->getPageURL() . '" method="post" id="classes-form">' .
+            '<form class="clear" action="' . App::backend()->getPageURL() . '" method="post" id="classes-form">' .
             '<fieldset class="two-cols"><legend>' . __('My CSS Classes') . '</legend>' .
             '<table class="maximal">' .
             '<thead>' .
@@ -244,7 +243,7 @@ class Manage extends Process
                 '<td><code>' . Html::escapeHTML($rs->comment_class) . '</code></td>' .
                 '<td>' . Html::escapeHTML($rs->comment_author_mail) . '</td>' .
                 '<td><span style="padding:1px 5px;color:' . $color . ';background-color:' . $backgroundcolor . '">' . __('Thanks to use Carnaval') . '</span></td>' .
-                '<td class="nowrap status"><a href="' . dcCore::app()->admin->getPageURL() . '&amp;id=' . $rs->class_id . '"><img src="images/edit-mini.png" alt="" title="' . __('Edit this record') . '" /></a></td>' .
+                '<td class="nowrap status"><a href="' . App::backend()->getPageURL() . '&amp;id=' . $rs->class_id . '"><img src="images/edit-mini.png" alt="" title="' . __('Edit this record') . '" /></a></td>' .
                 '</tr>';
             }
 
@@ -267,7 +266,7 @@ class Manage extends Process
         }
 
         echo
-        '<form action="' . dcCore::app()->admin->getPageURL() . '" method="post" id="add-css"><fieldset class="clear"><legend>' . $legend . '</legend><p class="field"><label class="classic required" title="' . __('Required field') . '">' . __('Name:') .
+        '<form action="' . App::backend()->getPageURL() . '" method="post" id="add-css"><fieldset class="clear"><legend>' . $legend . '</legend><p class="field"><label class="classic required" title="' . __('Required field') . '">' . __('Name:') .
         form::field('comment_author', 30, 255, Html::escapeHTML($comment_author), '', '2') .
         '</label></p><p class="field"><label class="classic required" title="' . __('Required field') . '">' . __('CSS Class:') .
         form::field('comment_class', 30, 255, Html::escapeHTML($comment_class), '', '3') .

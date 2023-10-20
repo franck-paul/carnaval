@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\carnaval;
 
-use dcCore;
 use Dotclear\App;
 
 class FrontendBehaviors
@@ -28,7 +27,7 @@ class FrontendBehaviors
 
     public static function carnavalStyleHelper(): string
     {
-        $cval = dcCore::app()->carnaval->getClasses();
+        $cval = App::frontend()->carnaval->getClasses();
         $css  = [];
         $res  = '';
         while ($cval->fetch()) {

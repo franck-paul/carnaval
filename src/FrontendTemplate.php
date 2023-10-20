@@ -15,8 +15,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\carnaval;
 
 use ArrayObject;
-use dcCore;
-
+use Dotclear\App;
 use Dotclear\Helper\Html\Html;
 
 class FrontendTemplate
@@ -32,14 +31,14 @@ class FrontendTemplate
         $ret = Html::escapeHTML($ret);
 
         return
-        '<?php if (dcCore::app()->ctx->comments->isMe()) { ' .
+        '<?php if (App::frontend()->context()->comments->isMe()) { ' .
         "echo '" . addslashes($ret) . "'; } " .
         'echo ' . self::class . '::getCommentClass(); ?>';
     }
 
     public static function getCommentClass(): string
     {
-        $classe_perso = dcCore::app()->carnaval->getCommentClass(dcCore::app()->ctx->comments->getEmail(false));
+        $classe_perso = App::frontend()->carnaval->getCommentClass(App::frontend()->context()->comments->getEmail(false));
 
         return Html::escapeHTML($classe_perso);
     }

@@ -14,8 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\carnaval;
 
-use dcCore;
-use dcNamespace;
+use Dotclear\App;
 use Dotclear\Core\Process;
 use Dotclear\Database\Structure;
 use Exception;
@@ -35,7 +34,7 @@ class Install extends Process
 
         try {
             // Init
-            $new_structure = new Structure(dcCore::app()->con, dcCore::app()->prefix);
+            $new_structure = new Structure(App::con(), App::con()->prefix());
 
             $new_structure->carnaval
                 ->class_id('integer', 0, false)
@@ -50,14 +49,14 @@ class Install extends Process
                 ->index('idx_class_blog_id', 'btree', 'blog_id')
             ;
 
-            $current_structure = new Structure(dcCore::app()->con, dcCore::app()->prefix);
+            $current_structure = new Structure(App::con(), App::con()->prefix());
             $current_structure->synchronize($new_structure);
 
             $settings = My::settings();
-            $settings->put('carnaval_active', false, dcNamespace::NS_BOOL, 'Carnaval activation flag', false, true);
-            $settings->put('carnaval_colors', false, dcNamespace::NS_BOOL, 'Use colors defined with Carnaval plugin', false, true);
+            $settings->put('carnaval_active', false, App::blogWorkspace()::NS_BOOL, 'Carnaval activation flag', false, true);
+            $settings->put('carnaval_colors', false, App::blogWorkspace()::NS_BOOL, 'Use colors defined with Carnaval plugin', false, true);
         } catch (Exception $e) {
-            dcCore::app()->error->add($e->getMessage());
+            App::error()->add($e->getMessage());
         }
 
         return true;

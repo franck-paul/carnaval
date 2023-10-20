@@ -17,11 +17,9 @@ $this->registerModule(
     '4.0',
     [
         'requires'    => [['core', '2.28']],
-        'permissions' => dcCore::app()->auth->makePermissions([
-            dcAuth::PERMISSION_CONTENT_ADMIN,
-        ]),
-        'type'     => 'plugin',
-        'settings' => [
+        'permissions' => '',
+        'type'        => 'plugin',
+        'settings'    => [
         ],
 
         'details'    => 'https://open-time.net/?q=carnaval',
