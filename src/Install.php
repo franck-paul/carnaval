@@ -37,13 +37,13 @@ class Install extends Process
             $new_structure = new Structure(App::con(), App::con()->prefix());
 
             $new_structure->carnaval
-                ->class_id('integer', 0, false)
-                ->blog_id('varchar', 32, false)
-                ->comment_author('varchar', 255, false)
-                ->comment_author_mail('varchar', 255, false)
-                ->comment_class('varchar', 255, false)
-                ->comment_text_color('varchar', 7, false)
-                ->comment_background_color('varchar', 7, false)
+                ->field('class_id', 'integer', 0, false)
+                ->field('blog_id', 'varchar', 32, false)
+                ->field('comment_author', 'varchar', 255, false)
+                ->field('comment_author_mail', 'varchar', 255, false)
+                ->field('comment_class', 'varchar', 255, false)
+                ->field('comment_text_color', 'varchar', 7, false)
+                ->field('comment_background_color', 'varchar', 7, false)
 
                 ->primary('pk_carnaval', 'class_id')
                 ->index('idx_class_blog_id', 'btree', 'blog_id')
