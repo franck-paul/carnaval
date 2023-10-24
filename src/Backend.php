@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\carnaval;
 
 use Dotclear\App;
-use Dotclear\Core\Backend\Menus;
 use Dotclear\Core\Process;
 
 class Backend extends Process
@@ -41,7 +40,7 @@ class Backend extends Process
             'importSingleV2' => BackendBehaviors::importSingle(...),
         ]);
 
-        My::addBackendMenuItem(Menus::MENU_BLOG);
+        My::addBackendMenuItem(App::backend()->menus()::MENU_BLOG);
 
         return true;
     }
