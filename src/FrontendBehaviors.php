@@ -40,11 +40,13 @@ class FrontendBehaviors
                 self::backgroundImg($css, '#comments dt.' . $cl_class, $cl_backg, $cl_class . '-comment-t.png');
                 self::backgroundImg($css, '#comments dd.' . $cl_class, $cl_backg, $cl_class . '-comment-b.png');
             }
+
             foreach ($css as $selector => $values) {
                 $res .= $selector . " {\n";
                 foreach ($values as $k => $v) {
                     $res .= $k . ':' . $v . ";\n";
                 }
+
                 $res .= "}\n";
             }
         }

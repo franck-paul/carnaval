@@ -31,8 +31,7 @@ class FrontendTemplate
         $ret = Html::escapeHTML($ret);
 
         return
-        '<?php if (App::frontend()->context()->comments->isMe()) { ' .
-        "echo '" . addslashes($ret) . "'; } " .
+        '<?php if (App::frontend()->context()->comments->isMe()) { echo \'' . addslashes($ret) . "'; } " .
         'echo ' . self::class . '::getCommentClass(); ?>';
     }
 

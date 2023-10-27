@@ -26,6 +26,7 @@ use form;
 class Manage extends Process
 {
     private static bool $can_write_images = false;
+
     private static bool $add_carnaval     = false;
 
     /**
@@ -121,8 +122,8 @@ class Manage extends Process
         // Saving new configuration
         if (!empty($_POST['saveconfig'])) {
             try {
-                $active = (empty($_POST['active'])) ? false : true;
-                $colors = (empty($_POST['colors'])) ? false : true;
+                $active = !empty($_POST['active']);
+                $colors = !empty($_POST['colors']);
 
                 $settings->put('carnaval_active', $active, 'boolean', 'Carnaval activation flag');
                 $settings->put('carnaval_colors', $colors, 'boolean', 'Use colors defined with Carnaval plugin');
@@ -149,8 +150,11 @@ class Manage extends Process
         }
 
         $settings = My::settings();
-
-        $comment_author = $comment_author_mail = $comment_class = $comment_text_color = $comment_background_color = '';
+        $comment_author = '';
+        $comment_author_mail = '';
+        $comment_class = '';
+        $comment_text_color = '';
+        $comment_background_color = '';
 
         $legend = __('New CSS Class');
         $button = __('save');
@@ -174,8 +178,8 @@ class Manage extends Process
                 $comment_background_color = $rs->comment_background_color;
                 unset($rs);
             }
-        } catch (Exception $e) {
-            App::error()->add($e->getMessage());
+        } catch (Exception $exception) {
+            App::error()->add($exception->getMessage());
         }
 
         // Get CSS Classes
@@ -183,8 +187,8 @@ class Manage extends Process
 
         try {
             $rs = App::backend()->carnaval->getClasses();
-        } catch (Exception $e) {
-            App::error()->add($e->getMessage());
+        } catch (Exception $exception) {
+            App::error()->add($exception->getMessage());
         }
 
         $head = My::jsLoad('admin.js') .
@@ -250,9 +254,7 @@ class Manage extends Process
             echo '</tbody></table>';
 
             echo
-            '<div class="two-cols">' .
-            '<p class="col checkboxes-helpers"></p>' .
-            '<p class="col right">' .
+            '<div class="two-cols"><p class="col checkboxes-helpers"></p><p class="col right">' .
                 My::parsedHiddenFields([
                     'p' => 'carnaval',
                 ]) .

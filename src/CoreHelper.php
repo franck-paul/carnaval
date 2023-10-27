@@ -85,6 +85,7 @@ class CoreHelper
             if (!is_writable($public)) {
                 return false;
             }
+
             if ($create) {
                 Files::makeDir($imgs);
             }
@@ -92,11 +93,7 @@ class CoreHelper
             return true;
         }
 
-        if ($imgs === false || !is_writable($imgs)) {
-            return false;
-        }
-
-        return true;
+        return $imgs !== false && is_writable($imgs);
     }
 
     public static function createImages(string $color, string $name): void

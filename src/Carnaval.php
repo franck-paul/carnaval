@@ -27,10 +27,14 @@ class Carnaval
     /**
      * @var array<string, mixed>
      */
-    public array $found;    // Avoid multiple SQL requests
+    public array $found = [
+        'comments' => [],
+    ];    // Avoid multiple SQL requests
 
     private BlogInterface $blog;
+
     private ConnectionInterface $con;
+
     private string $table;
 
     public function __construct()
@@ -39,10 +43,6 @@ class Carnaval
 
         $this->con   = App::con();
         $this->table = App::con()->prefix() . self::CARNAVAL_TABLE_NAME;
-
-        $this->found = [
-            'comments' => [],
-        ];
     }
 
     /**
@@ -62,9 +62,9 @@ class Carnaval
         if (isset($params['class_id'])) {
             $strReq .= 'AND class_id = ' . (int) $params['class_id'] . ' ';
         }
+
         if (isset($params['mail'])) {
-            $strReq .= 'AND comment_author_mail <> \'\' ' .
-                'AND comment_author_mail = \'' .
+            $strReq .= 'AND comment_author_mail <> \'\' AND comment_author_mail = \'' .
                 $this->con->escapeStr($params['mail']) . '\'';
         }
 
@@ -107,9 +107,11 @@ class Carnaval
         if ($cur->comment_author == '') {
             throw new Exception(__('You must provide a name.'));
         }
+
         if ($cur->comment_class == '') {
             throw new Exception(__('You must provide a CSS Class.'));
         }
+
         if ($cur->comment_author_mail == '') {
             throw new Exception(__('You must provide an e-mail.'));
         }
@@ -135,9 +137,11 @@ class Carnaval
         if ($author != '') {
             $cur->comment_author = $author;
         }
+
         if ($cur->comment_class == '') {
             throw new Exception(__('You must provide a CSS Class.'));
         }
+
         if ($cur->comment_author_mail == '') {
             throw new Exception(__('You must provide an e-mail.'));
         }

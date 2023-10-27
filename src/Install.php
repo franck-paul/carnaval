@@ -55,8 +55,8 @@ class Install extends Process
             $settings = My::settings();
             $settings->put('carnaval_active', false, App::blogWorkspace()::NS_BOOL, 'Carnaval activation flag', false, true);
             $settings->put('carnaval_colors', false, App::blogWorkspace()::NS_BOOL, 'Use colors defined with Carnaval plugin', false, true);
-        } catch (Exception $e) {
-            App::error()->add($e->getMessage());
+        } catch (Exception $exception) {
+            App::error()->add($exception->getMessage());
         }
 
         return true;
