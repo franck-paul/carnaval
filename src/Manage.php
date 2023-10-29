@@ -18,16 +18,34 @@ use Dotclear\App;
 use Dotclear\Core\Backend\Notices;
 use Dotclear\Core\Backend\Page;
 use Dotclear\Core\Process;
+use Dotclear\Helper\Html\Form\Button;
+use Dotclear\Helper\Html\Form\Form;
+use Dotclear\Helper\Html\Form\Checkbox;
+use Dotclear\Helper\Html\Form\Color;
+use Dotclear\Helper\Html\Form\Div;
+use Dotclear\Helper\Html\Form\Fieldset;
+use Dotclear\Helper\Html\Form\Img;
+use Dotclear\Helper\Html\Form\Input;
+use Dotclear\Helper\Html\Form\Label;
+use Dotclear\Helper\Html\Form\Legend;
+use Dotclear\Helper\Html\Form\Link;
+use Dotclear\Helper\Html\Form\Para;
+use Dotclear\Helper\Html\Form\Submit;
+use Dotclear\Helper\Html\Form\Table;
+use Dotclear\Helper\Html\Form\Tbody;
+use Dotclear\Helper\Html\Form\Td;
+use Dotclear\Helper\Html\Form\Th;
+use Dotclear\Helper\Html\Form\Thead;
+use Dotclear\Helper\Html\Form\Tr;
 use Dotclear\Helper\Html\Html;
-use Dotclear\Helper\Text;
+use Dotclear\Helper\Text as Txt;
 use Exception;
-use form;
 
 class Manage extends Process
 {
     private static bool $can_write_images = false;
 
-    private static bool $add_carnaval     = false;
+    private static bool $add_carnaval = false;
 
     /**
      * Initializes the page.
@@ -54,7 +72,7 @@ class Manage extends Process
         if (!empty($_POST['carnaval_class'])) {
             $comment_author           = $_POST['comment_author'];
             $comment_author_mail      = $_POST['comment_author_mail'];
-            $comment_class            = strtolower(Text::str2URL($_POST['comment_class']));
+            $comment_class            = strtolower(Txt::str2URL($_POST['comment_class']));
             $comment_text_color       = CoreHelper::adjustColor($_POST['comment_text_color']);
             $comment_background_color = CoreHelper::adjustColor($_POST['comment_background_color']);
 
@@ -149,12 +167,12 @@ class Manage extends Process
             return;
         }
 
-        $settings = My::settings();
-        $comment_author = '';
-        $comment_author_mail = '';
-        $comment_class = '';
-        $comment_text_color = '';
-        $comment_background_color = '';
+        $settings                 = My::settings();
+        $comment_author           = '';
+        $comment_author_mail      = '';
+        $comment_class            = '';
+        $comment_text_color       = '#ffffff';
+        $comment_background_color = '#000000';
 
         $legend = __('New CSS Class');
         $button = __('save');
@@ -211,85 +229,205 @@ class Manage extends Process
 
         // Form
         echo
-        '<form action="' . App::backend()->getPageURL() . '" method="post" id="config-form"><fieldset><legend>' . __('Plugin activation') . '</legend><p class="field">' .
-        form::checkbox('active', 1, $active) .
-        '<label class=" classic" for="active">' . __('Enable Carnaval') . '</label></p><p class="field">' .
-        form::checkbox('colors', 1, $colors) .
-        '<label class=" classic" for="colors">' . __('Use defined colors') . '</label></p><p>' . form::hidden(['p'], 'carnaval') .
-        My::parsedHiddenFields() .
-        '<input type="submit" name="saveconfig" accesskey="s" value="' . __('Save configuration') . '"/>' .
-        '</p>' .
-        '</fieldset></form>';
+        (new Form('config-form'))
+            ->action(App::backend()->getPageURL())
+            ->method('post')
+            ->fields([
+                (new Fieldset())
+                    ->legend((new Legend(__('Plugin activation'))))
+                    ->fields([
+                        (new Para())
+                            ->items([
+                                (new Checkbox('active', $active))
+                                    ->value(1)
+                                    ->label((new Label(__('Enable Carnaval'), Label::INSIDE_TEXT_AFTER))),
+                                (new Checkbox('colors', $colors))
+                                    ->value(1)
+                                    ->label((new Label(__('Use defined colors'), Label::INSIDE_TEXT_AFTER))),
+                            ]),
+                        (new Submit(['saveconfig']))
+                            ->accesskey('s')
+                            ->value(__('Save configuration')),
+                        ... My::hiddenFields(),
+                    ]),
+            ])
+        ->render();
 
         if (!$rs->isEmpty()) {
-            echo
-            '<form class="clear" action="' . App::backend()->getPageURL() . '" method="post" id="classes-form">' .
-            '<fieldset class="two-cols"><legend>' . __('My CSS Classes') . '</legend>' .
-            '<table class="maximal">' .
-            '<thead>' .
-            '<tr>' .
-                '<th colspan="2">' . __('Name') . '</th>' .
-                '<th>' . __('CSS Class') . '</th>' .
-                '<th>' . __('Mail') . '</th>' .
-                '<th colspan="2">' . __('Colors') . '</th>' .
-            '</tr>' .
-            '</thead>' .
-            '<tbody id="classes-list">';
-
+            $rows = [];
             while ($rs->fetch()) {
-                $color           = $rs->comment_text_color       ?? 'inherit';
-                $backgroundcolor = $rs->comment_background_color ?? 'inherit';
+                $color           = $rs->comment_text_color       ?? '#ffffff';
+                $backgroundcolor = $rs->comment_background_color ?? '#000000';
 
-                echo
-                '<tr class="line" id="l_' . $rs->class_id . '">' .
-                '<td class="minimal">' . form::checkbox(['select[]'], $rs->class_id) . '</td>' .
-                '<td>' . Html::escapeHTML($rs->comment_author) . '</td>' .
-                '<td><code>' . Html::escapeHTML($rs->comment_class) . '</code></td>' .
-                '<td>' . Html::escapeHTML($rs->comment_author_mail) . '</td>' .
-                '<td><span style="padding:1px 5px;color:' . $color . ';background-color:' . $backgroundcolor . '">' . __('Thanks to use Carnaval') . '</span></td>' .
-                '<td class="nowrap status"><a href="' . App::backend()->getPageURL() . '&amp;id=' . $rs->class_id . '"><img src="images/edit-mini.png" alt="" title="' . __('Edit this record') . '" /></a></td>' .
-                '</tr>';
+                $rows[] = (new Tr('l_' . $rs->class_id))
+                    ->class('line')
+                    ->items([
+                        (new Td())
+                            ->class('minimal')
+                            ->items([
+                                (new Checkbox(['select[]']))
+                                    ->label(new Label($rs->class_id), Label::INSIDE_TEXT_AFTER),
+                            ]),
+                        (new Td())
+                            ->text(Html::escapeHTML($rs->comment_author)),
+                        (new Td())
+                            ->text('<code>' . Html::escapeHTML($rs->comment_class) . '</code>'),
+                        (new Td())
+                            ->text(Html::escapeHTML($rs->comment_author_mail)),
+                        (new Td())
+                            ->text('<span style="padding:1px 5px;color:' . $color . ';background-color:' . $backgroundcolor . '">' . __('Thanks to use Carnaval') . '</span>'),
+                        (new Td())
+                            ->class(['nowrap', 'status'])
+                            ->items([
+                                (new Link())
+                                    ->href(My::manageUrl(['id' => $rs->class_id]))
+                                    ->items([
+                                        (new Img('images/edit-mini.png'))
+                                            ->alt(__('Edit this record'))
+                                            ->title(__('Edit this record')),
+                                    ]),
+                            ]),
+                    ]);
             }
 
-            echo '</tbody></table>';
-
             echo
-            '<div class="two-cols"><p class="col checkboxes-helpers"></p><p class="col right">' .
-                My::parsedHiddenFields([
-                    'p' => 'carnaval',
-                ]) .
-                '<input type="submit" class="delete" name="removeaction" accesskey="d" value="' . __('delete') . '" onclick="return window.confirm(dotclear.msg.delete_records)" />' .
-            '</p></div></fieldset></form>';
+            (new Form('classes-form'))
+                ->action(App::backend()->getPageURL())
+                ->method('post')
+                ->class('clear')
+                ->fields([
+                    (new Fieldset())
+                        ->class('two-cols')
+                        ->legend(new Legend(__('My CSS Classes')))
+                        ->fields([
+                            (new Table())
+                                ->class('maximal')
+                                ->thead(
+                                    (new Thead())
+                                    ->items([
+                                        (new Tr())
+                                            ->items([
+                                                (new Th())
+                                                    ->colspan(2)
+                                                    ->text(__('Name')),
+                                                (new Th())
+                                                    ->text(__('CSS Class')),
+                                                (new Th())
+                                                    ->text(__('Mail')),
+                                                (new Th())
+                                                    ->colspan(2)
+                                                    ->text(__('Colors')),
+                                            ]),
+                                    ])
+                                )
+                                ->tbody(
+                                    (new Tbody('classes-list'))
+                                    ->items($rows)
+                                ),
+                            (new Div())
+                                ->class('two-cols')
+                                ->items([
+                                    (new Para())
+                                        ->class(['col', 'checkboxes-helpers']),
+                                    (new Para())
+                                        ->class(['col', 'right'])
+                                        ->items([
+                                            (new Submit('removeaction', __('delete')))
+                                                ->accesskey('d')
+                                                ->class('delete')
+                                                ->extra('onclick="return window.confirm(dotclear.msg.delete_records)'),
+                                            ... My::hiddenFields(),
+                                        ]),
+                                ]),
+                        ]),
+                ])
+            ->render();
         }
 
         if (!self::$add_carnaval) {
-            echo '<div id="new-class"><h3><a class="new" id="carnaval-control" href="#">' .
-            __('New CSS class') . '</a></h3></div>';
+            echo
+            (new Button('carnaval-control', __('New CSS class')))
+            ->class(['add', 'button'])
+            ->render();
         }
 
-        echo
-        '<form action="' . App::backend()->getPageURL() . '" method="post" id="add-css"><fieldset class="clear"><legend>' . $legend . '</legend><p class="field"><label class="classic required" title="' . __('Required field') . '">' . __('Name:') .
-        form::field('comment_author', 30, 255, Html::escapeHTML($comment_author), '', '2') .
-        '</label></p><p class="field"><label class="classic required" title="' . __('Required field') . '">' . __('CSS Class:') .
-        form::field('comment_class', 30, 255, Html::escapeHTML($comment_class), '', '3') .
-        '</label></p><p class="field"><label class="classic required">' . __('Mail:') .
-        form::field('comment_author_mail', 30, 255, Html::escapeHTML($comment_author_mail), '', '4') .
-        '</label></p>' .
-        '<p class="field"><label class="classic">' . __('Text color:') .
-        form::field('comment_text_color', 7, 7, Html::escapeHTML($comment_text_color), 'colorpicker', '6') .
-        '</label></p><p class="field"><label class="classic">' . __('Background color:') .
-        form::field('comment_background_color', 7, 7, Html::escapeHTML($comment_background_color), 'colorpicker', '7') .
-        '</label></p>' .
-        My::parsedHiddenFields([
-            'p' => 'carnaval',
-        ]);
-
+        $params = [];
         if (!empty($_REQUEST['id'])) {
-            echo form::hidden('id', $_REQUEST['id']);
+            $params = ['id' => $_REQUEST['id']];
         }
 
         echo
-        '<input type="submit" name="carnaval_class" accesskey="a" value="' . $button . '" tabindex="6" /></fieldset></form>';
+        (new Form('add-css'))
+            ->action(App::backend()->getPageURL())
+            ->method('post')
+            ->items([
+                (new Fieldset())
+                    ->class('clear')
+                    ->legend(new Legend($legend))
+                    ->items([
+                        (new Para())
+                            ->items([
+                                (new Input('comment_author'))
+                                    ->size(30)
+                                    ->maxlength(255)
+                                    ->default(Html::escapeHTML($comment_author))
+                                    ->label(
+                                        (new Label(
+                                            '<abbr title="' . __('Required field') . '">*</abbr> ' . __('Name:'),
+                                            Label::OUTSIDE_LABEL_BEFORE
+                                        ))
+                                        ->class('required')
+                                    ),
+                            ]),
+                        (new Para())
+                            ->items([
+                                (new Input('comment_class'))
+                                    ->size(30)
+                                    ->maxlength(255)
+                                    ->default(Html::escapeHTML($comment_class))
+                                    ->label(
+                                        (new Label(
+                                            '<abbr title="' . __('Required field') . '">*</abbr> ' . __('CSS Class:'),
+                                            Label::OUTSIDE_LABEL_BEFORE
+                                        ))
+                                        ->class('required')
+                                    ),
+                            ]),
+                        (new Para())
+                            ->items([
+                                (new Input('comment_author_mail'))
+                                    ->size(30)
+                                    ->maxlength(255)
+                                    ->default(Html::escapeHTML($comment_author_mail))
+                                    ->label(
+                                        (new Label(
+                                            '<abbr title="' . __('Required field') . '">*</abbr> ' . __('Mail:'),
+                                            Label::OUTSIDE_LABEL_BEFORE
+                                        ))
+                                        ->class('required')
+                                    ),
+                            ]),
+                        (new Para())
+                            ->items([
+                                (new Color('comment_text_color'))
+                                    ->default(Html::escapeHTML($comment_text_color))
+                                    ->label((new Label(__('Text color:'), Label::OUTSIDE_LABEL_BEFORE))),
+                            ]),
+                        (new Para())
+                            ->items([
+                                (new Color('comment_background_color'))
+                                    ->default(Html::escapeHTML($comment_background_color))
+                                    ->label((new Label(__('Background color:'), Label::OUTSIDE_LABEL_BEFORE))),
+                            ]),
+                        (new Para())
+                            ->items([
+                                (new Submit('carnaval_class', $button))
+                                    ->accesskey('a'),
+                                ... My::hiddenFields($params),
+                            ]),
+                    ]),
+            ])
+        ->render();
 
         Page::helpBlock('carnaval');
 

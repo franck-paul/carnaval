@@ -2,11 +2,12 @@
 'use strict';
 
 $(() => {
-  const t = $('#carnaval-control');
-  t.css('display', 'inline');
-  $('#add-css').hide();
-  t.click(function () {
-    $('#add-css').show();
+  const control = $('#carnaval-control');
+  const addcss = $('#add-css');
+  control.css('display', 'inline');
+  addcss.hide();
+  control.click(function () {
+    addcss.show();
     $(this).hide();
     return false;
   });
@@ -18,8 +19,4 @@ $(() => {
       $('#new-class,#classes-form').hide();
     }
   });
-
-  if (!document.getElementById('#active').checked) {
-    $('#new-class,#classes-form').hide();
-  }
 });
