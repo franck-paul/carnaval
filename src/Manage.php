@@ -266,7 +266,7 @@ class Manage extends Process
                             ->class('minimal')
                             ->items([
                                 (new Checkbox(['select[]']))
-                                    ->label(new Label($rs->class_id), Label::INSIDE_TEXT_AFTER),
+                                    ->label(new Label($rs->class_id, Label::INSIDE_TEXT_AFTER)),
                             ]),
                         (new Td())
                             ->text(Html::escapeHTML($rs->comment_author)),
