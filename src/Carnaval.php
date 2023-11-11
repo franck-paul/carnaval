@@ -16,6 +16,9 @@ namespace Dotclear\Plugin\carnaval;
 
 use Dotclear\App;
 use Dotclear\Database\MetaRecord;
+use Dotclear\Database\Statement\DeleteStatement;
+use Dotclear\Database\Statement\SelectStatement;
+use Dotclear\Database\Statement\UpdateStatement;
 use Dotclear\Interface\Core\BlogInterface;
 use Dotclear\Interface\Core\ConnectionInterface;
 use Exception;
@@ -54,21 +57,32 @@ class Carnaval
      */
     public function getClasses(array $params = []): MetaRecord
     {
-        $strReq = 'SELECT class_id, comment_author, comment_author_mail, comment_class,  ' .
-            'comment_text_color, comment_background_color ' .
-            'FROM ' . $this->table . ' ' .
-            "WHERE blog_id = '" . $this->con->escapeStr($this->blog->id) . "' ";
+        $sql = new SelectStatement();
+        $sql
+            ->columns([
+                'class_id',
+                'comment_author',
+                'comment_author_mail',
+                'comment_class',
+                'comment_text_color',
+                'comment_background_color',
+            ])
+            ->from($this->table)
+            ->where('blog_id = ' . $sql->quote($this->blog->id()));
+        ;
 
         if (isset($params['class_id'])) {
-            $strReq .= 'AND class_id = ' . (int) $params['class_id'] . ' ';
+            $sql->and('class_id = ' . (int) $params['class_id']);
         }
 
         if (isset($params['mail'])) {
-            $strReq .= 'AND comment_author_mail <> \'\' AND comment_author_mail = \'' .
-                $this->con->escapeStr($params['mail']) . '\'';
+            $sql
+                ->and('comment_author_mail <> ' . $sql->quote(''))
+                ->and('comment_author_mail = ' . $sql->quote($params['mail']))
+            ;
         }
 
-        return new MetaRecord($this->con->select($strReq));
+        return $sql->select() ?? MetaRecord::newFromArray([]);
     }
 
     /**
@@ -146,21 +160,24 @@ class Carnaval
             throw new Exception(__('You must provide an e-mail.'));
         }
 
-        $cur->update('WHERE class_id = ' . (int) $id .
-            " AND blog_id = '" . $this->con->escapeStr($this->blog->id) . "'");
+        $sql = new UpdateStatement();
+        $sql
+            ->where('blog_id = ' . $sql->quote($this->blog->id()))
+            ->and('class_id = ' . (int) $id)
+            ->update($cur);
 
         $this->blog->triggerBlog();
     }
 
     public function delClass(string $id): void
     {
-        $id = (int) $id;
+        $sql = new DeleteStatement();
+        $sql
+            ->from($this->table)
+            ->where('blog_id = ' . $sql->quote($this->blog->id()))
+            ->and('class_id = ' . (int) $id)
+            ->delete();
 
-        $strReq = 'DELETE FROM ' . $this->table . ' ' .
-                "WHERE blog_id = '" . $this->con->escapeStr($this->blog->id) . "' " .
-                'AND class_id = ' . $id . ' ';
-
-        $this->con->execute($strReq);
         $this->blog->triggerBlog();
     }
 

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\carnaval;
 
 use Dotclear\App;
+use Dotclear\Database\Statement\SelectStatement;
 use Dotclear\Plugin\importExport\FlatBackupItem;
 use Dotclear\Plugin\importExport\FlatExport;
 use Dotclear\Plugin\importExport\FlatImportV2;
@@ -23,19 +24,29 @@ class BackendBehaviors
 {
     public static function exportFull(FlatExport $exp): string
     {
-        $exp->exportTable('carnaval');
+        $exp->exportTable(Carnaval::CARNAVAL_TABLE_NAME);
 
         return '';
     }
 
     public static function exportSingle(FlatExport $exp, string $blog_id): string
     {
+        $sql = new SelectStatement();
+        $sql
+            ->columns([
+                'comment_author',
+                'comment_author_mail',
+                'comment_class',
+                'comment_text_color',
+                'comment_background_color',
+            ])
+            ->from($sql->as(App::con()->prefix() . Carnaval::CARNAVAL_TABLE_NAME, 'C'))
+            ->where('C.blog_id = ' . $sql->quote($blog_id))
+        ;
+
         $exp->export(
-            'carnaval',
-            'SELECT comment_author, comment_author_mail, comment_class, ' .
-            'comment_text_color, comment_background_color ' .
-            'FROM ' . App::con()->prefix() . 'carnaval C ' .
-            "WHERE C.blog_id = '" . $blog_id . "'"
+            Carnaval::CARNAVAL_TABLE_NAME,
+            $sql->statement()
         );
 
         return '';
@@ -43,16 +54,16 @@ class BackendBehaviors
 
     public static function importInit(FlatImportV2 $bk): string
     {
-        $bk->cur_alias = App::con()->openCursor(App::con()->prefix() . 'carnaval');    // @phpstan-ignore-line
-        $bk->carnaval  = new Carnaval();                                                        // @phpstan-ignore-line
-        $bk->classes   = $bk->carnaval->getClasses();                                           // @phpstan-ignore-line
+        $bk->cur_alias = App::con()->openCursor(App::con()->prefix() . Carnaval::CARNAVAL_TABLE_NAME);  // @phpstan-ignore-line
+        $bk->carnaval  = new Carnaval();                                                                // @phpstan-ignore-line
+        $bk->classes   = $bk->carnaval->getClasses();                                                   // @phpstan-ignore-line
 
         return '';
     }
 
     public static function importFull(FlatBackupItem $line, FlatImportV2 $bk): string
     {
-        if ($line->__name == 'carnaval') {
+        if ($line->__name == Carnaval::CARNAVAL_TABLE_NAME) {
             $bk->cur_alias->clean();    // @phpstan-ignore-line
 
             $bk->cur_alias->blog_id                  = (string) $line->blog_id;                     // @phpstan-ignore-line
@@ -70,7 +81,7 @@ class BackendBehaviors
 
     public static function importSingle(FlatBackupItem $line, FlatImportV2 $bk): string
     {
-        if ($line->__name == 'carnaval') {
+        if ($line->__name == Carnaval::CARNAVAL_TABLE_NAME) {
             $bk->carnaval->addClass(      // @phpstan-ignore-line
                 $line->comment_author,              // @phpstan-ignore-line
                 $line->comment_author_mail,         // @phpstan-ignore-line
