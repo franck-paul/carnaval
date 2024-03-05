@@ -282,7 +282,12 @@ class Manage extends Process
                                 (new Link())
                                     ->href(My::manageUrl(['id' => $rs->class_id]))
                                     ->items([
-                                        (new Img('images/edit-mini.png'))
+                                        (new Img('images/edit.svg'))
+                                            ->class('mark mark-edit light-only')
+                                            ->alt(__('Edit this record'))
+                                            ->title(__('Edit this record')),
+                                        (new Img('images/edit-dark.svg'))
+                                            ->class('mark mark-edit dark-only')
                                             ->alt(__('Edit this record'))
                                             ->title(__('Edit this record')),
                                     ]),

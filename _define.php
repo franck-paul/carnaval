@@ -16,7 +16,7 @@ $this->registerModule(
     'Osku and contributors',
     '5.3',
     [
-        'requires'    => [['core', '2.28']],
+        'requires'    => [['core', '2.30']],
         'permissions' => '',
         'type'        => 'plugin',
         'settings'    => [
