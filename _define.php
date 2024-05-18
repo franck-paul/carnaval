@@ -14,7 +14,7 @@ $this->registerModule(
     'Carnaval',
     'Identify comments',
     'Osku and contributors',
-    '5.3',
+    '5.4',
     [
         'requires'    => [['core', '2.30']],
         'permissions' => '',
