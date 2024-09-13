@@ -24,6 +24,6 @@ $this->registerModule(
 
         'details'    => 'https://open-time.net/?q=carnaval',
         'support'    => 'https://github.com/franck-paul/carnaval',
-        'repository' => 'https://raw.githubusercontent.com/franck-paul/carnaval/master/dcstore.xml',
+        'repository' => 'https://raw.githubusercontent.com/franck-paul/carnaval/main/dcstore.xml',
     ]
 );

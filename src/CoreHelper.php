@@ -130,7 +130,14 @@ class CoreHelper
             return;
         }
 
-        $fill = imagecolorallocate($d_comment_t, $comment_color[0], $comment_color[1], $comment_color[2]);
+        $clamp = fn ($min, $value, $max) => ($value < $min ? $min : ($value > $max ? $max : $value));
+
+        $fill = imagecolorallocate(
+            $d_comment_t,
+            $clamp(0, $comment_color[0], 255),
+            $clamp(0, $comment_color[1], 255),
+            $clamp(0, $comment_color[2], 255)
+        );
         imagefill($d_comment_t, 0, 0, (int) $fill);
 
         $s_comment_t = imagecreatefrompng($comment_t);
@@ -152,7 +159,12 @@ class CoreHelper
             return;
         }
 
-        $fill = imagecolorallocate($d_comment_b, $comment_color[0], $comment_color[1], $comment_color[2]);
+        $fill = imagecolorallocate(
+            $d_comment_b,
+            $clamp(0, $comment_color[0], 255),
+            $clamp(0, $comment_color[1], 255),
+            $clamp(0, $comment_color[2], 255)
+        );
         imagefill($d_comment_b, 0, 0, (int) $fill);
 
         $s_comment_b = imagecreatefrompng($comment_b);

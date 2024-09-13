@@ -302,7 +302,6 @@ class Manage extends Process
                 ->class('clear')
                 ->fields([
                     (new Fieldset())
-                        ->class('two-cols')
                         ->legend(new Legend(__('My CSS Classes')))
                         ->fields([
                             (new Table())
