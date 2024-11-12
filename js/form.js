@@ -1,22 +1,16 @@
-/*global $, dotclear */
+/*global dotclear */
 'use strict';
 
 dotclear.ready(() => {
-  const control = $('#carnaval-control');
-  const addcss = $('#add-css');
-  control.css('display', 'inline');
-  addcss.hide();
-  control.click(function () {
-    addcss.show();
-    $(this).hide();
-    return false;
-  });
+  const ctrl = document.getElementById('carnaval-control');
+  const add = document.getElementById('add-css');
 
-  $('#active').change(function () {
-    if (this.checked) {
-      $('#new-class,#classes-form').show();
-    } else {
-      $('#new-class,#classes-form').hide();
-    }
+  ctrl.style.display = 'inline';
+  add.style.display = 'none';
+
+  ctrl.addEventListener('click', () => {
+    add.style.display = '';
+    ctrl.style.display = 'none';
+    return false;
   });
 });
