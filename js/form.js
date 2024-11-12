@@ -1,7 +1,7 @@
-/*global $ */
+/*global $, dotclear */
 'use strict';
 
-$(() => {
+dotclear.ready(() => {
   const control = $('#carnaval-control');
   const addcss = $('#add-css');
   control.css('display', 'inline');
