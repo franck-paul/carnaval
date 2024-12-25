@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief carnaval, a plugin for Dotclear 2
  *
@@ -34,11 +35,11 @@ class Carnaval
         'comments' => [],
     ];    // Avoid multiple SQL requests
 
-    private BlogInterface $blog;
+    private readonly BlogInterface $blog;
 
-    private ConnectionInterface $con;
+    private readonly ConnectionInterface $con;
 
-    private string $table;
+    private readonly string $table;
 
     public function __construct()
     {
