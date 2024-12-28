@@ -119,15 +119,15 @@ class Carnaval
         $cur->comment_text_color       = (string) $text;
         $cur->comment_background_color = (string) $backg;
 
-        if ($cur->comment_author == '') {
+        if ($cur->comment_author === '') {
             throw new Exception(__('You must provide a name.'));
         }
 
-        if ($cur->comment_class == '') {
+        if ($cur->comment_class === '') {
             throw new Exception(__('You must provide a CSS Class.'));
         }
 
-        if ($cur->comment_author_mail == '') {
+        if ($cur->comment_author_mail === '') {
             throw new Exception(__('You must provide an e-mail.'));
         }
 
@@ -149,15 +149,15 @@ class Carnaval
         $cur->comment_text_color       = $text;
         $cur->comment_background_color = $backg;
 
-        if ($author != '') {
+        if ($author !== '') {
             $cur->comment_author = $author;
         }
 
-        if ($cur->comment_class == '') {
+        if ($cur->comment_class === '') {
             throw new Exception(__('You must provide a CSS Class.'));
         }
 
-        if ($cur->comment_author_mail == '') {
+        if ($cur->comment_author_mail === '') {
             throw new Exception(__('You must provide an e-mail.'));
         }
 
