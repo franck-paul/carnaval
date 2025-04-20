@@ -15,9 +15,9 @@ $this->registerModule(
     'Carnaval',
     'Identify comments',
     'Osku and contributors',
-    '5.6',
+    '6.0',
     [
-        'date'     => '2003-08-13T13:42:00+0100',
+        'date'     => '2025-04-20T15:04:51+0200',
         'requires' => [
             ['core', '2.34'],
             ['TemplateHelper'],
