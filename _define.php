@@ -17,8 +17,11 @@ $this->registerModule(
     'Osku and contributors',
     '5.6',
     [
-        'date'        => '2003-08-13T13:42:00+0100',
-        'requires'    => [['core', '2.30']],
+        'date'     => '2003-08-13T13:42:00+0100',
+        'requires' => [
+            ['core', '2.34'],
+            ['TemplateHelper'],
+        ],
         'permissions' => '',
         'type'        => 'plugin',
         'settings'    => [
@@ -27,5 +30,6 @@ $this->registerModule(
         'details'    => 'https://open-time.net/?q=carnaval',
         'support'    => 'https://github.com/franck-paul/carnaval',
         'repository' => 'https://raw.githubusercontent.com/franck-paul/carnaval/main/dcstore.xml',
+        'license'    => 'gpl2',
     ]
 );

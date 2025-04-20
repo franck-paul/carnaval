@@ -16,8 +16,8 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\carnaval;
 
 use ArrayObject;
-use Dotclear\App;
 use Dotclear\Helper\Html\Html;
+use Dotclear\Plugin\TemplateHelper\Code;
 
 class FrontendTemplate
 {
@@ -26,18 +26,11 @@ class FrontendTemplate
      */
     public static function CommentIfMe(array|ArrayObject $attr): string
     {
-        $ret = $attr['return'] ?? 'me';
-        $ret = Html::escapeHTML($ret);
-
-        return
-        '<?php if (App::frontend()->context()->comments->isMe()) { echo \'' . addslashes($ret) . "'; } " .
-        'echo ' . self::class . '::getCommentClass(); ?>';
-    }
-
-    public static function getCommentClass(): string
-    {
-        $classe_perso = App::frontend()->carnaval->getCommentClass(App::frontend()->context()->comments->getEmail(false));
-
-        return Html::escapeHTML($classe_perso);
+        return Code::getPHPTemplateValueCode(
+            FrontendTemplateCode::CommentIfMe(...),
+            [
+                addslashes(Html::escapeHTML($attr['return'] ?? 'me')),
+            ],
+        );
     }
 }
