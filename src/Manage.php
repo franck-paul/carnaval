@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief carnaval, a plugin for Dotclear 2
  *
@@ -338,8 +339,7 @@ class Manage extends Process
                                         ->items([
                                             (new Submit('removeaction', __('delete')))
                                                 ->accesskey('d')
-                                                ->class('delete')
-                                                ->extra('onclick="return window.confirm(dotclear.msg.delete_records)'),
+                                                ->class('delete'),
                                             ... My::hiddenFields(),
                                         ]),
                                 ]),
