@@ -21,7 +21,6 @@ use Dotclear\Database\Statement\DeleteStatement;
 use Dotclear\Database\Statement\SelectStatement;
 use Dotclear\Database\Statement\UpdateStatement;
 use Dotclear\Interface\Core\BlogInterface;
-use Dotclear\Interface\Core\ConnectionInterface;
 use Exception;
 
 class Carnaval
@@ -37,15 +36,12 @@ class Carnaval
 
     private readonly BlogInterface $blog;
 
-    private readonly ConnectionInterface $con;
-
     private readonly string $table;
 
     public function __construct()
     {
         $this->blog = App::blog();
 
-        $this->con   = App::con();
         $this->table = App::con()->prefix() . self::CARNAVAL_TABLE_NAME;
     }
 
@@ -111,7 +107,7 @@ class Carnaval
      */
     public function addClass($author, $mail, $text, $backg, $class): void
     {
-        $cur                           = $this->con->openCursor($this->table);
+        $cur                           = App::con()->openCursor($this->table);
         $cur->blog_id                  = (string) $this->blog->id;
         $cur->comment_author           = (string) $author;
         $cur->comment_author_mail      = (string) $mail;
@@ -133,7 +129,7 @@ class Carnaval
 
         $strReq = 'SELECT MAX(class_id) FROM ' . $this->table;
 
-        $rs            = new MetaRecord($this->con->select($strReq));
+        $rs            = new MetaRecord(App::con()->select($strReq));
         $cur->class_id = (int) $rs->f(0) + 1;
         $cur->insert();
 
@@ -142,7 +138,7 @@ class Carnaval
 
     public function updateClass(string $id, string $author, string $mail = '', string $text = '', string $backg = '', string $class = ''): void
     {
-        $cur = $this->con->openCursor($this->table);
+        $cur = App::con()->openCursor($this->table);
 
         $cur->comment_author_mail      = $mail;
         $cur->comment_class            = $class;
