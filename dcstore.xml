@@ -1,11 +1,11 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="carnaval">
     <name>Carnaval</name>
-    <version>6.1</version>
+    <version>6.2</version>
     <author>Osku and contributors</author>
     <desc>Identify comments</desc>
-    <date>2025-05-15T17:19:45+0200</date>
-    <file>https://github.com/franck-paul/carnaval/releases/download/6.1/plugin-carnaval-6.1.zip</file>
+    <date>2025-08-27T11:26:16+0200</date>
+    <file>https://github.com/franck-paul/carnaval/releases/download/6.2/plugin-carnaval-6.2.zip</file>
     <da:dcmin>2.34</da:dcmin>
     <da:details>https://open-time.net/?q=carnaval</da:details>
     <da:support>https://github.com/franck-paul/carnaval</da:support>
