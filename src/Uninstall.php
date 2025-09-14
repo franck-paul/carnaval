@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief carnaval, a plugin for Dotclear 2
  *
@@ -15,11 +16,13 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\carnaval;
 
 use Dotclear\App;
-use Dotclear\Core\Process;
+use Dotclear\Helper\Process\TraitProcess;
 use Dotclear\Plugin\Uninstaller\Uninstaller;
 
-class Uninstall extends Process
+class Uninstall
 {
+    use TraitProcess;
+
     public static function init(): bool
     {
         return self::status(My::checkContext(My::UNINSTALL));
@@ -40,7 +43,7 @@ class Uninstall extends Process
         // $var   = My::id(); // Var sub-folder
 
         // Database table name
-        // $table = App::con()->prefix() . 'carnaval';
+        $table = Carnaval::CARNAVAL_TABLE_NAME;
 
         $user_actions = [
 
@@ -81,8 +84,8 @@ class Uninstall extends Process
 
             // Table (database)
             'tables' => [
-                // ['empty', $table],      // Empty table
-                // ['delete', $table],     // Delete table
+                ['empty', $table],      // Empty table
+                ['delete', $table],     // Delete table
             ],
 
             // Plugin or Theme

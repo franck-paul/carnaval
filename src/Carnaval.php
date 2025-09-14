@@ -42,7 +42,7 @@ class Carnaval
     {
         $this->blog = App::blog();
 
-        $this->table = App::con()->prefix() . self::CARNAVAL_TABLE_NAME;
+        $this->table = App::db()->con()->prefix() . self::CARNAVAL_TABLE_NAME;
     }
 
     /**
@@ -107,7 +107,7 @@ class Carnaval
      */
     public function addClass($author, $mail, $text, $backg, $class): void
     {
-        $cur                           = App::con()->openCursor($this->table);
+        $cur                           = App::db()->con()->openCursor($this->table);
         $cur->blog_id                  = (string) $this->blog->id;
         $cur->comment_author           = (string) $author;
         $cur->comment_author_mail      = (string) $mail;
@@ -129,7 +129,7 @@ class Carnaval
 
         $strReq = 'SELECT MAX(class_id) FROM ' . $this->table;
 
-        $rs            = new MetaRecord(App::con()->select($strReq));
+        $rs            = new MetaRecord(App::db()->con()->select($strReq));
         $cur->class_id = (int) $rs->f(0) + 1;
         $cur->insert();
 
@@ -138,7 +138,7 @@ class Carnaval
 
     public function updateClass(string $id, string $author, string $mail = '', string $text = '', string $backg = '', string $class = ''): void
     {
-        $cur = App::con()->openCursor($this->table);
+        $cur = App::db()->con()->openCursor($this->table);
 
         $cur->comment_author_mail      = $mail;
         $cur->comment_class            = $class;

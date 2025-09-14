@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief carnaval, a plugin for Dotclear 2
  *
@@ -40,7 +41,7 @@ class BackendBehaviors
                 'comment_text_color',
                 'comment_background_color',
             ])
-            ->from($sql->as(App::con()->prefix() . Carnaval::CARNAVAL_TABLE_NAME, 'C'))
+            ->from($sql->as(App::db()->con()->prefix() . Carnaval::CARNAVAL_TABLE_NAME, 'C'))
             ->where('C.blog_id = ' . $sql->quote($blog_id))
         ;
 
@@ -54,7 +55,7 @@ class BackendBehaviors
 
     public static function importInit(FlatImportV2 $bk): string
     {
-        $bk->cur_alias = App::con()->openCursor(App::con()->prefix() . Carnaval::CARNAVAL_TABLE_NAME);  // @phpstan-ignore-line
+        $bk->cur_alias = App::db()->con()->openCursor(App::db()->con()->prefix() . Carnaval::CARNAVAL_TABLE_NAME);  // @phpstan-ignore-line
         $bk->carnaval  = new Carnaval();                                                                // @phpstan-ignore-line
         $bk->classes   = $bk->carnaval->getClasses();                                                   // @phpstan-ignore-line
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief carnaval, a plugin for Dotclear 2
  *
@@ -15,12 +16,13 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\carnaval;
 
 use Dotclear\App;
-use Dotclear\Core\Process;
-use Dotclear\Database\Structure;
+use Dotclear\Helper\Process\TraitProcess;
 use Exception;
 
-class Install extends Process
+class Install
 {
+    use TraitProcess;
+
     public static function init(): bool
     {
         return self::status(My::checkContext(My::INSTALL));
@@ -34,7 +36,7 @@ class Install extends Process
 
         try {
             // Init
-            $new_structure = new Structure(App::con(), App::con()->prefix());
+            $new_structure = App::db()->structure();
 
             $new_structure->carnaval
                 ->field('class_id', 'integer', 0, false)
@@ -49,7 +51,7 @@ class Install extends Process
                 ->index('idx_class_blog_id', 'btree', 'blog_id')
             ;
 
-            $current_structure = new Structure(App::con(), App::con()->prefix());
+            $current_structure = App::db()->structure();
             $current_structure->synchronize($new_structure);
 
             $settings = My::settings();
