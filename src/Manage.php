@@ -16,8 +16,6 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\carnaval;
 
 use Dotclear\App;
-use Dotclear\Core\Backend\Notices;
-use Dotclear\Core\Backend\Page;
 use Dotclear\Helper\Html\Form\Button;
 use Dotclear\Helper\Html\Form\Form;
 use Dotclear\Helper\Html\Form\Checkbox;
@@ -95,7 +93,7 @@ class Manage
                         CoreHelper::createImages($comment_background_color, $comment_class);
                     }
 
-                    Notices::addSuccessNotice(__('CSS Class has been successfully updated.'));
+                    App::backend()->notices()->addSuccessNotice(__('CSS Class has been successfully updated.'));
                     My::redirect();
                 } catch (Exception $e) {
                     App::error()->add($e->getMessage());
@@ -113,7 +111,7 @@ class Manage
                         CoreHelper::createImages($comment_background_color, $comment_class);
                     }
 
-                    Notices::addSuccessNotice(__('Class has been successfully created.'));
+                    App::backend()->notices()->addSuccessNotice(__('Class has been successfully created.'));
                     My::redirect();
                 } catch (Exception $e) {
                     self::$add_carnaval = true;
@@ -135,7 +133,7 @@ class Manage
             }
 
             if (!App::error()->flag()) {
-                Notices::addSuccessNotice(__('Classes have been successfully removed.'));
+                App::backend()->notices()->addSuccessNotice(__('Classes have been successfully removed.'));
                 My::redirect();
             }
         }
@@ -151,7 +149,7 @@ class Manage
 
                 App::blog()->triggerBlog();
 
-                Notices::addSuccessNotice(__('Configuration successfully updated.'));
+                App::backend()->notices()->addSuccessNotice(__('Configuration successfully updated.'));
                 My::redirect();
             } catch (Exception $e) {
                 App::error()->add($e->getMessage());
@@ -214,21 +212,21 @@ class Manage
 
         $head = My::jsLoad('admin.js') .
         My::cssLoad('style.css') .
-        Page::jsJson('carnaval', ['delete_records' => __('Are you sure you want to delete selected CSS Classes ?')]);
+        App::backend()->page()->jsJson('carnaval', ['delete_records' => __('Are you sure you want to delete selected CSS Classes ?')]);
 
         if (!self::$add_carnaval) {
             $head .= My::jsLoad('form.js');
         }
 
-        Page::openModule(My::name(), $head);
+        App::backend()->page()->openModule(My::name(), $head);
 
-        echo Page::breadcrumb(
+        echo App::backend()->page()->breadcrumb(
             [
                 Html::escapeHTML(App::blog()->name()) => '',
                 __('Carnaval')                        => '',
             ]
         );
-        echo Notices::getNotices();
+        echo App::backend()->notices()->getNotices();
 
         // Form
         echo
@@ -435,8 +433,8 @@ class Manage
             ])
         ->render();
 
-        Page::helpBlock('carnaval');
+        App::backend()->page()->helpBlock('carnaval');
 
-        Page::closeModule();
+        App::backend()->page()->closeModule();
     }
 }
