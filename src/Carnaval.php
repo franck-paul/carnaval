@@ -23,6 +23,9 @@ use Dotclear\Database\Statement\UpdateStatement;
 use Dotclear\Interface\Core\BlogInterface;
 use Exception;
 
+/**
+ * @todo switch to SqlStatement
+ */
 class Carnaval
 {
     public const CARNAVAL_TABLE_NAME = 'carnaval';

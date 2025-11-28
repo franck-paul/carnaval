@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief carnaval, a plugin for Dotclear 2
  *
@@ -142,17 +143,12 @@ class CoreHelper
 
         $s_comment_t = imagecreatefrompng($comment_t);
         if ($s_comment_t === false) {
-            imagedestroy($d_comment_t);
-
             return;
         }
 
         imagealphablending($s_comment_t, true);
         imagecopy($d_comment_t, $s_comment_t, 0, 0, 0, 0, 500, 25);
-
         imagepng($d_comment_t, self::imagesPath() . '/' . $dest_t);
-        imagedestroy($d_comment_t);
-        imagedestroy($s_comment_t);
 
         $d_comment_b = imagecreatetruecolor(500, 7);
         if ($d_comment_b === false) {
@@ -169,17 +165,12 @@ class CoreHelper
 
         $s_comment_b = imagecreatefrompng($comment_b);
         if ($s_comment_b === false) {
-            imagedestroy($d_comment_b);
-
             return;
         }
 
         imagealphablending($s_comment_b, true);
         imagecopy($d_comment_b, $s_comment_b, 0, 0, 0, 0, 500, 7);
-        imagedestroy($s_comment_b);
-
         imagepng($d_comment_b, self::imagesPath() . '/' . $dest_b);
-        imagedestroy($d_comment_b);
     }
 
     public static function dropImage(string $img): void
