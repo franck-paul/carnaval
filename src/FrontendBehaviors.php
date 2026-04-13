@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief carnaval, a plugin for Dotclear 2
  *
@@ -7,7 +8,7 @@
  *
  * @author Franck Paul and contributors
  *
- * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright Franck Paul contact@open-time.net
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 declare(strict_types=1);
@@ -27,59 +28,58 @@ class FrontendBehaviors
 
     public static function carnavalStyleHelper(): string
     {
-        $cval = App::frontend()->carnaval->getClasses();
-        $css  = [];
-        $res  = '';
-        while ($cval->fetch()) {
-            $cl_class = $cval->comment_class;
-            $cl_txt   = $cval->comment_text_color;
-            $cl_backg = $cval->comment_background_color;
-            self::prop($css, '#comments dd.' . $cl_class, 'color', $cl_txt);
-            self::prop($css, '#comments dd.' . $cl_class, 'background-color', $cl_backg);
-            if (App::blog()->settings()->system->theme == 'blowup') {
-                self::backgroundImg($css, '#comments dt.' . $cl_class, $cl_backg, $cl_class . '-comment-t.png');
-                self::backgroundImg($css, '#comments dd.' . $cl_class, $cl_backg, $cl_class . '-comment-b.png');
+        if (!App::backend()->carnaval instanceof Carnaval) {
+            return '';
+        }
+
+        $carnaval = App::backend()->carnaval;
+
+        $rs = $carnaval->getClasses();
+
+        /**
+         * @var array<string, array<string>>
+         */
+        $css = [];
+
+        $res = '';
+
+        while ($rs->fetch()) {
+            $comment_class            = is_string($comment_class = $rs->comment_class) ? $comment_class : '';
+            $comment_text_color       = is_string($comment_text_color = $rs->comment_text_color) ? $comment_text_color : '#ffffff';
+            $comment_background_color = is_string($comment_background_color = $rs->comment_background_color) ? $comment_background_color : '#000000';
+
+            $css['#comments dd.' . $comment_class] = [
+                'color: ' . $comment_text_color . ';',
+                'background-color: ', $comment_background_color,';',
+            ];
+
+            $theme = is_string($theme = App::blog()->settings()->system->theme) ? $theme : '';
+            if ($theme === 'blowup') {
+                $image = $comment_class . '-comment-t.png';
+                $file  = CoreHelper::imagesPath() . '/' . $image;
+                if (file_exists($file)) {
+                    $css['#comments dt.' . $comment_class] = [
+                        'background-image: url(' . CoreHelper::imagesURL() . '/' . $image . ');',
+                    ];
+                }
+                $image = $comment_class . '-comment-b.png';
+                $file  = CoreHelper::imagesPath() . '/' . $image;
+                if (file_exists($file)) {
+                    $css['#comments dd.' . $comment_class] = [
+                        'background-image: url(' . CoreHelper::imagesURL() . '/' . $image . ');',
+                    ];
+                }
             }
 
-            foreach ($css as $selector => $values) {
+            foreach ($css as $selector => $rules) {
                 $res .= $selector . " {\n";
-                foreach ($values as $k => $v) {
-                    $res .= $k . ':' . $v . ";\n";
-                }
-
+                foreach ($rules as $rule) {
+                    $res .= $rule . "\n";
+                };
                 $res .= "}\n";
             }
         }
 
         return $res;
-    }
-
-    /**
-     * Store CSS property value in associated array
-     *
-     * @param  array<string, array<string, mixed>>      $css      CSS associated array
-     * @param  string                                   $selector selector
-     * @param  string                                   $prop     property
-     * @param  mixed                                    $value    value
-     */
-    protected static function prop(array &$css, string $selector, string $prop, $value): void
-    {
-        if ($value) {
-            $css[$selector][$prop] = $value;
-        }
-    }
-
-    /**
-     * @param  array<string, array<string, string>>     $css      CSS associated array
-     * @param  string                                   $selector selector
-     * @param  mixed                                    $value    value
-     * @param  string                                   $image    image
-     */
-    protected static function backgroundImg(array &$css, string $selector, $value, string $image): void
-    {
-        $file = CoreHelper::imagesPath() . '/' . $image;
-        if ($value && file_exists($file)) {
-            $css[$selector]['background-image'] = 'url(' . CoreHelper::imagesURL() . '/' . $image . ')';
-        }
     }
 }

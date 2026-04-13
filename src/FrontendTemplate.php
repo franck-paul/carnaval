@@ -8,7 +8,7 @@
  *
  * @author Franck Paul and contributors
  *
- * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright Franck Paul contact@open-time.net
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 declare(strict_types=1);
@@ -26,10 +26,12 @@ class FrontendTemplate
      */
     public static function CommentIfMe(array|ArrayObject $attr): string
     {
+        $ret = isset($attr['return']) && is_string($ret = $attr['return']) ? $ret : 'me';
+
         return Code::getPHPTemplateValueCode(
             FrontendTemplateCode::CommentIfMe(...),
             [
-                addslashes(Html::escapeHTML($attr['return'] ?? 'me')),
+                addslashes(Html::escapeHTML($ret)),
             ],
         );
     }

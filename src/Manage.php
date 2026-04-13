@@ -8,7 +8,7 @@
  *
  * @author Franck Paul and contributors
  *
- * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright Franck Paul contact@open-time.net
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 declare(strict_types=1);
@@ -65,23 +65,32 @@ class Manage
             return false;
         }
 
+        if (!App::backend()->carnaval instanceof Carnaval) {
+            return false;
+        }
+
+        $carnaval = App::backend()->carnaval;
+
+        // Post data helpers
+        $_Str = fn (string $name, string $default = ''): string => isset($_POST[$name]) && is_string($val = $_POST[$name]) ? $val : $default;
+
         $settings = My::settings();
 
         self::$can_write_images = CoreHelper::canWriteImages();
         self::$add_carnaval     = false;
 
         if (!empty($_POST['carnaval_class'])) {
-            $comment_author           = $_POST['comment_author'];
-            $comment_author_mail      = $_POST['comment_author_mail'];
-            $comment_class            = strtolower(Txt::str2URL($_POST['comment_class']));
-            $comment_text_color       = CoreHelper::adjustColor($_POST['comment_text_color']);
-            $comment_background_color = CoreHelper::adjustColor($_POST['comment_background_color']);
+            $comment_author           = $_Str('comment_author');
+            $comment_author_mail      = $_Str('comment_author_mail');
+            $comment_class            = strtolower(Txt::str2URL($_Str('comment_class')));
+            $comment_text_color       = App::backend()->themeConfig()->adjustColor($_Str('comment_text_color'));
+            $comment_background_color = App::backend()->themeConfig()->adjustColor($_Str('comment_background_color'));
 
             if (!empty($_REQUEST['id'])) {
-                $id = $_REQUEST['id'];
+                $id = is_numeric($id = $_REQUEST['id']) ? (int) $id : 0;
 
                 try {
-                    App::backend()->carnaval->updateClass(
+                    $carnaval->updateClass(
                         $id,
                         $comment_author,
                         $comment_author_mail,
@@ -100,7 +109,7 @@ class Manage
                 }
             } else {
                 try {
-                    App::backend()->carnaval->addClass(
+                    $carnaval->addClass(
                         $comment_author,
                         $comment_author_mail,
                         $comment_text_color,
@@ -121,14 +130,17 @@ class Manage
         }
 
         // Delete CSS Class
-        if (!empty($_POST['removeaction']) && !empty($_POST['select'])) {
+        if (!empty($_POST['removeaction']) && !empty($_POST['select']) && is_array($_POST['select'])) {
             foreach ($_POST['select'] as $v) {
-                try {
-                    App::backend()->carnaval->delClass($v);
-                } catch (Exception $e) {
-                    App::error()->add($e->getMessage());
+                $id = is_numeric($id = $v) ? (int) $id : '';
+                if ($id !== '') {
+                    try {
+                        $carnaval->delClass($id);
+                    } catch (Exception $e) {
+                        App::error()->add($e->getMessage());
 
-                    break;
+                        break;
+                    }
                 }
             }
 
@@ -168,6 +180,12 @@ class Manage
             return;
         }
 
+        if (!App::backend()->carnaval instanceof Carnaval) {
+            return;
+        }
+
+        $carnaval = App::backend()->carnaval;
+
         $settings                 = My::settings();
         $comment_author           = '';
         $comment_author_mail      = '';
@@ -184,28 +202,21 @@ class Manage
 
         try {
             if (!empty($_REQUEST['id'])) {
-                $rs = App::backend()->carnaval->getClass($_REQUEST['id']);
+                $id = is_numeric($id = $_REQUEST['id']) ? (int) $id : 0;
+                if ($id !== 0) {
+                    $rs = $carnaval->getClass($id);
 
-                self::$add_carnaval = true;
-                $legend             = __('Edit CSS Class');
-                $button             = __('update');
+                    self::$add_carnaval = true;
+                    $legend             = __('Edit CSS Class');
+                    $button             = __('update');
 
-                $comment_author           = $rs->comment_author;
-                $comment_author_mail      = $rs->comment_author_mail;
-                $comment_class            = $rs->comment_class;
-                $comment_text_color       = $rs->comment_text_color;
-                $comment_background_color = $rs->comment_background_color;
-                unset($rs);
+                    $comment_author           = $rs->comment_author;
+                    $comment_author_mail      = $rs->comment_author_mail;
+                    $comment_class            = $rs->comment_class;
+                    $comment_text_color       = $rs->comment_text_color;
+                    $comment_background_color = $rs->comment_background_color;
+                }
             }
-        } catch (Exception $exception) {
-            App::error()->add($exception->getMessage());
-        }
-
-        // Get CSS Classes
-        $rs = null;
-
-        try {
-            $rs = App::backend()->carnaval->getClasses();
         } catch (Exception $exception) {
             App::error()->add($exception->getMessage());
         }
@@ -254,46 +265,55 @@ class Manage
             ])
         ->render();
 
+        // Get CSS Classes
+        $rs = $carnaval->getClasses();
+
         if (!$rs->isEmpty()) {
             $rows = [];
             while ($rs->fetch()) {
-                $color           = $rs->comment_text_color       ?? '#ffffff';
-                $backgroundcolor = $rs->comment_background_color ?? '#000000';
+                $class_id = is_numeric($class_id = $rs->class_id) ? (int) $class_id : '';
+                if ($class_id !== '') {
+                    $comment_author           = is_string($comment_author = $rs->comment_author) ? $comment_author : '';
+                    $comment_class            = is_string($comment_class = $rs->comment_class) ? $comment_class : '';
+                    $comment_author_mail      = is_string($comment_author_mail = $rs->comment_author_mail) ? $comment_author_mail : '';
+                    $comment_text_color       = is_string($comment_text_color = $rs->comment_text_color) ? $comment_text_color : '#ffffff';
+                    $comment_background_color = is_string($comment_background_color = $rs->comment_background_color) ? $comment_background_color : '#000000';
 
-                $rows[] = (new Tr('l_' . $rs->class_id))
-                    ->class('line')
-                    ->items([
-                        (new Td())
-                            ->class('minimal')
-                            ->items([
-                                (new Checkbox(['select[]']))
-                                    ->value($rs->class_id),
-                            ]),
-                        (new Td())
-                            ->text(Html::escapeHTML($rs->comment_author)),
-                        (new Td())
-                            ->text('<code>' . Html::escapeHTML($rs->comment_class) . '</code>'),
-                        (new Td())
-                            ->text(Html::escapeHTML($rs->comment_author_mail)),
-                        (new Td())
-                            ->text('<span style="padding:1px 5px;color:' . $color . ';background-color:' . $backgroundcolor . '">' . __('Thanks to use Carnaval') . '</span>'),
-                        (new Td())
-                            ->class(['nowrap', 'status'])
-                            ->items([
-                                (new Link())
-                                    ->href(My::manageUrl(['id' => $rs->class_id]))
-                                    ->items([
-                                        (new Img('images/edit.svg'))
-                                            ->class('mark mark-edit light-only')
-                                            ->alt(__('Edit this record'))
-                                            ->title(__('Edit this record')),
-                                        (new Img('images/edit-dark.svg'))
-                                            ->class('mark mark-edit dark-only')
-                                            ->alt(__('Edit this record'))
-                                            ->title(__('Edit this record')),
-                                    ]),
-                            ]),
-                    ]);
+                    $rows[] = (new Tr('l_' . $class_id))
+                        ->class('line')
+                        ->items([
+                            (new Td())
+                                ->class('minimal')
+                                ->items([
+                                    (new Checkbox(['select[]']))
+                                        ->value($class_id),
+                                ]),
+                            (new Td())
+                                ->text(Html::escapeHTML($comment_author)),
+                            (new Td())
+                                ->text('<code>' . Html::escapeHTML($comment_class) . '</code>'),
+                            (new Td())
+                                ->text(Html::escapeHTML($comment_author_mail)),
+                            (new Td())
+                                ->text('<span style="padding:1px 5px;color:' . $comment_text_color . ';background-color:' . $comment_background_color . '">' . __('Thanks to use Carnaval') . '</span>'),
+                            (new Td())
+                                ->class(['nowrap', 'status'])
+                                ->items([
+                                    (new Link())
+                                        ->href(My::manageUrl(['id' => $class_id]))
+                                        ->items([
+                                            (new Img('images/edit.svg'))
+                                                ->class('mark mark-edit light-only')
+                                                ->alt(__('Edit this record'))
+                                                ->title(__('Edit this record')),
+                                            (new Img('images/edit-dark.svg'))
+                                                ->class('mark mark-edit dark-only')
+                                                ->alt(__('Edit this record'))
+                                                ->title(__('Edit this record')),
+                                        ]),
+                                ]),
+                        ]);
+                }
             }
 
             echo
@@ -357,7 +377,8 @@ class Manage
 
         $params = [];
         if (!empty($_REQUEST['id'])) {
-            $params = ['id' => $_REQUEST['id']];
+            $id     = is_numeric($id = $_REQUEST['id']) ? (int) $id : 0;
+            $params = ['id' => (string) $id];
         }
 
         echo
@@ -374,7 +395,6 @@ class Manage
                                 (new Input('comment_author'))
                                     ->size(30)
                                     ->maxlength(255)
-                                    ->default(Html::escapeHTML($comment_author))
                                     ->label(
                                         (new Label(
                                             '<abbr title="' . __('Required field') . '">*</abbr> ' . __('Name:'),
@@ -388,7 +408,6 @@ class Manage
                                 (new Input('comment_class'))
                                     ->size(30)
                                     ->maxlength(255)
-                                    ->default(Html::escapeHTML($comment_class))
                                     ->label(
                                         (new Label(
                                             '<abbr title="' . __('Required field') . '">*</abbr> ' . __('CSS Class:'),
@@ -402,7 +421,6 @@ class Manage
                                 (new Input('comment_author_mail'))
                                     ->size(30)
                                     ->maxlength(255)
-                                    ->default(Html::escapeHTML($comment_author_mail))
                                     ->label(
                                         (new Label(
                                             '<abbr title="' . __('Required field') . '">*</abbr> ' . __('Mail:'),
@@ -414,13 +432,13 @@ class Manage
                         (new Para())
                             ->items([
                                 (new Color('comment_text_color'))
-                                    ->default(Html::escapeHTML($comment_text_color))
+                                    ->default('#ffffff')
                                     ->label((new Label(__('Text color:'), Label::OUTSIDE_LABEL_BEFORE))),
                             ]),
                         (new Para())
                             ->items([
                                 (new Color('comment_background_color'))
-                                    ->default(Html::escapeHTML($comment_background_color))
+                                    ->default('#000000')
                                     ->label((new Label(__('Background color:'), Label::OUTSIDE_LABEL_BEFORE))),
                             ]),
                         (new Para())

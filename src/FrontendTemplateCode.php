@@ -8,7 +8,7 @@
  *
  * @author Franck Paul and contributors
  *
- * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright Franck Paul contact@open-time.net
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 declare(strict_types=1);
@@ -25,9 +25,17 @@ class FrontendTemplateCode
     public static function CommentIfMe(
         string $_ret_,
     ): void {
-        if (App::frontend()->context()->comments->isMe()) {
-            echo $_ret_;
+        if (App::frontend()->context()->comments instanceof \Dotclear\Database\MetaRecord) {
+            if (App::frontend()->context()->comments->isMe()) {
+                echo $_ret_;
+            }
+            if (App::frontend()->carnaval instanceof \Dotclear\Plugin\carnaval\Carnaval) {
+                $carnaval_email = is_string($carnaval_email = App::frontend()->context()->comments->getEmail(false)) ? $carnaval_email : '';
+                if ($carnaval_email !== '') {
+                    echo \Dotclear\Helper\Html\Html::escapeHTML(App::frontend()->carnaval->getCommentClass($carnaval_email));
+                }
+                unset($carnaval_email);
+            }
         }
-        echo \Dotclear\Helper\Html\Html::escapeHTML(App::frontend()->carnaval->getCommentClass(App::frontend()->context()->comments->getEmail(false)));
     }
 }

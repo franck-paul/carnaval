@@ -8,7 +8,7 @@
  *
  * @author Franck Paul and contributors
  *
- * @copyright Franck Paul carnet.franck.paul@gmail.com
+ * @copyright Franck Paul contact@open-time.net
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 declare(strict_types=1);
@@ -16,85 +16,28 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\carnaval;
 
 use Dotclear\App;
-use Dotclear\Helper\File\Files;
 use Dotclear\Helper\File\Path;
 use Exception;
 
 class CoreHelper
 {
-    /**
-     * Check a CSS color
-     *
-     * @param  null|string  $c  CSS color
-     *
-     * @return string    checked CSS color
-     */
-    public static function adjustColor(?string $c): string
+    public static function imagesPath(): string
     {
-        if (is_null($c) || $c === '') {
-            return '';
-        }
+        $p_root = is_string($p_root = Path::real(App::blog()->publicPath())) ? $p_root : '';
 
-        $c = strtoupper($c);
-
-        if (preg_match('/^[A-F0-9]{3,6}$/', $c)) {
-            $c = '#' . $c;
-        }
-
-        if (preg_match('/^#[A-F0-9]{6}$/', $c)) {
-            return $c;
-        }
-
-        if (preg_match('/^#[A-F0-9]{3,}$/', $c)) {
-            return '#' . substr($c, 1, 1) . substr($c, 1, 1) . substr($c, 2, 1) . substr($c, 2, 1) . substr($c, 3, 1) . substr($c, 3, 1);
-        }
-
-        return '';
-    }
-
-    /**
-     * @return     false|string
-     */
-    public static function imagesPath(): string|bool
-    {
-        return Path::real(App::blog()->publicPath()) . '/carnaval-images';
+        return $p_root . '/carnaval-images';
     }
 
     public static function imagesURL(): string
     {
-        return App::blog()->settings()->system->public_url . '/carnaval-images';
+        $p_url = is_string($p_url = App::blog()->settings()->system->public_url) ? $p_url : '';
+
+        return $p_url . '/carnaval-images';
     }
 
     public static function canWriteImages(bool $create = false): bool
     {
-        $public = Path::real(App::blog()->publicPath());
-        $imgs   = self::imagesPath();
-
-        if ($public === false) {
-            return false;
-        }
-
-        if (!function_exists('imagecreatetruecolor') || !function_exists('imagepng') || !function_exists('imagecreatefrompng')) {
-            return false;
-        }
-
-        if (!is_dir($public)) {
-            return false;
-        }
-
-        if ($imgs !== false && !is_dir($imgs)) {
-            if (!is_writable($public)) {
-                return false;
-            }
-
-            if ($create) {
-                Files::makeDir($imgs);
-            }
-
-            return true;
-        }
-
-        return $imgs !== false && is_writable($imgs);
+        return App::backend()->themeConfig()->canWriteImages(self::imagesPath(), $create);
     }
 
     public static function createImages(string $color, string $name): void
@@ -114,31 +57,29 @@ class CoreHelper
         self::dropImage($cval_comment_t);
         self::dropImage($cval_comment_b);
 
-        $color = self::adjustColor($color);
+        $color = App::backend()->themeConfig()->adjustColor($color);
 
         self::commentImages($color, $comment_t, $comment_b, $cval_comment_t, $cval_comment_b);
     }
 
     protected static function commentImages(string $comment_color, string $comment_t, string $comment_b, string $dest_t, string $dest_b): void
     {
-        /**
-         * @var  array<int, int>
-         */
-        $comment_color = sscanf($comment_color, '#%2X%2X%2X');
+        $colors = sscanf($comment_color, '#%2X%2X%2X');
+
+        $red   = is_array($colors) && isset($colors[0]) && is_numeric($red = $colors[0]) ? (int) $red : 0;
+        $green = is_array($colors) && isset($colors[1]) && is_numeric($green = $colors[1]) ? (int) $green : 0;
+        $blue  = is_array($colors) && isset($colors[2]) && is_numeric($blue = $colors[2]) ? (int) $blue : 0;
+
+        $red   = max(0, min(255, $red));
+        $green = max(0, min(255, $green));
+        $blue  = max(0, min(255, $blue));
 
         $d_comment_t = imagecreatetruecolor(500, 25);
         if ($d_comment_t === false) {
             return;
         }
 
-        $clamp = fn ($min, $value, $max) => ($value < $min ? $min : ($value > $max ? $max : $value));
-
-        $fill = imagecolorallocate(
-            $d_comment_t,
-            $clamp(0, $comment_color[0], 255),
-            $clamp(0, $comment_color[1], 255),
-            $clamp(0, $comment_color[2], 255)
-        );
+        $fill = imagecolorallocate($d_comment_t, $red, $green, $blue);
         imagefill($d_comment_t, 0, 0, (int) $fill);
 
         $s_comment_t = imagecreatefrompng($comment_t);
@@ -155,12 +96,7 @@ class CoreHelper
             return;
         }
 
-        $fill = imagecolorallocate(
-            $d_comment_b,
-            $clamp(0, $comment_color[0], 255),
-            $clamp(0, $comment_color[1], 255),
-            $clamp(0, $comment_color[2], 255)
-        );
+        $fill = imagecolorallocate($d_comment_b, $red, $green, $blue);
         imagefill($d_comment_b, 0, 0, (int) $fill);
 
         $s_comment_b = imagecreatefrompng($comment_b);
