@@ -156,8 +156,8 @@ class Manage
                 $active = !empty($_POST['active']);
                 $colors = !empty($_POST['colors']);
 
-                $settings->put('carnaval_active', $active, 'boolean', 'Carnaval activation flag');
-                $settings->put('carnaval_colors', $colors, 'boolean', 'Use colors defined with Carnaval plugin');
+                $settings->put('carnaval_active', $active, App::blogWorkspace()::NS_BOOL, 'Carnaval activation flag');
+                $settings->put('carnaval_colors', $colors, App::blogWorkspace()::NS_BOOL, 'Use colors defined with Carnaval plugin');
 
                 App::blog()->triggerBlog();
 
