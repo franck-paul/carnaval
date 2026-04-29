@@ -1,12 +1,12 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="carnaval">
     <name>Carnaval</name>
-    <version>7.3</version>
+    <version>8.0</version>
     <author>Osku and contributors</author>
     <desc>Identify comments</desc>
-    <date>2026-04-13T10:50:00+0200</date>
-    <file>https://github.com/franck-paul/carnaval/releases/download/7.3/plugin-carnaval-7.3.zip</file>
-    <da:dcmin>2.36</da:dcmin>
+    <date>2026-04-29T14:22:56+0200</date>
+    <file>https://github.com/franck-paul/carnaval/releases/download/8.0/plugin-carnaval-8.0.zip</file>
+    <da:dcmin>2.38</da:dcmin>
     <da:details>https://dotclear.org/plugin/detail/carnaval</da:details>
     <da:support>https://github.com/franck-paul/carnaval</da:support>
   </module>
