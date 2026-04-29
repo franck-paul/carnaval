@@ -130,12 +130,8 @@ class Carnaval
             ->from($this->table)
             ->column($sql->max('class_id'));
 
-        $rs = $sql->select();
-        if ($rs instanceof MetaRecord) {
-            $last_id = is_numeric($last_id = $rs->f(0)) ? (int) $last_id : 0;
-        } else {
-            $last_id = 0;
-        }
+        $rs      = $sql->select();
+        $last_id = $rs instanceof MetaRecord ? $rs->cardinal() : 0;
 
         $cur->class_id = $last_id + 1;
         $cur->insert();
