@@ -62,6 +62,7 @@ class FrontendBehaviors
                         'background-image: url(' . CoreHelper::imagesURL() . '/' . $image . ');',
                     ];
                 }
+
                 $image = $comment_class . '-comment-b.png';
                 $file  = CoreHelper::imagesPath() . '/' . $image;
                 if (file_exists($file)) {
@@ -75,7 +76,8 @@ class FrontendBehaviors
                 $res .= $selector . " {\n";
                 foreach ($rules as $rule) {
                     $res .= $rule . "\n";
-                };
+                }
+
                 $res .= "}\n";
             }
         }

@@ -29,11 +29,13 @@ class FrontendTemplateCode
             if (App::frontend()->context()->comments->isMe()) {
                 echo $_ret_;
             }
+
             if (App::frontend()->carnaval instanceof \Dotclear\Plugin\carnaval\Carnaval) {
                 $carnaval_email = is_string($carnaval_email = App::frontend()->context()->comments->getEmail(false)) ? $carnaval_email : '';
                 if ($carnaval_email !== '') {
                     echo \Dotclear\Helper\Html\Html::escapeHTML(App::frontend()->carnaval->getCommentClass($carnaval_email));
                 }
+
                 unset($carnaval_email);
             }
         }
