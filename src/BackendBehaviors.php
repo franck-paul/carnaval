@@ -55,9 +55,9 @@ class BackendBehaviors
 
     public static function importInit(FlatImportV2 $bk): string
     {
-        $bk->cur_alias = App::db()->con()->openCursor(App::db()->con()->prefix() . Carnaval::CARNAVAL_TABLE_NAME);  // @phpstan-ignore-line
-        $bk->carnaval  = new Carnaval();                                                                // @phpstan-ignore-line
-        $bk->classes   = $bk->carnaval->getClasses();                                                   // @phpstan-ignore-line
+        $bk->cur_alias = App::db()->con()->openCursor(App::db()->con()->prefix() . Carnaval::CARNAVAL_TABLE_NAME); // @phpstan-ignore property.notFound
+        $bk->carnaval  = new Carnaval();                                                                // @phpstan-ignore property.notFound
+        $bk->classes   = $bk->carnaval->getClasses();                                                   // @phpstan-ignore property.notFound
 
         return '';
     }
@@ -65,16 +65,16 @@ class BackendBehaviors
     public static function importFull(FlatBackupItem $line, FlatImportV2 $bk): string
     {
         if ($line->__name == Carnaval::CARNAVAL_TABLE_NAME) {
-            $bk->cur_alias->clean();    // @phpstan-ignore-line
+            $bk->cur_alias->clean();    // @phpstan-ignore method.nonObject, property.notFound
 
-            $bk->cur_alias->blog_id                  = (string) $line->blog_id;                     // @phpstan-ignore-line
-            $bk->cur_alias->comment_author           = (string) $line->comment_author;              // @phpstan-ignore-line
-            $bk->cur_alias->comment_author_mail      = (string) $line->comment_author_mail;         // @phpstan-ignore-line
-            $bk->cur_alias->comment_class            = (string) $line->comment_class;               // @phpstan-ignore-line
-            $bk->cur_alias->comment_text_color       = (string) $line->comment_text_color;          // @phpstan-ignore-line
-            $bk->cur_alias->comment_background_color = (string) $line->comment_background_color;    // @phpstan-ignore-line
+            $bk->cur_alias->blog_id                  = (string) $line->blog_id;                     // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
+            $bk->cur_alias->comment_author           = (string) $line->comment_author;              // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
+            $bk->cur_alias->comment_author_mail      = (string) $line->comment_author_mail;         // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
+            $bk->cur_alias->comment_class            = (string) $line->comment_class;               // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
+            $bk->cur_alias->comment_text_color       = (string) $line->comment_text_color;          // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
+            $bk->cur_alias->comment_background_color = (string) $line->comment_background_color;    // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
 
-            $bk->cur_alias->insert();   // @phpstan-ignore-line
+            $bk->cur_alias->insert();   // @phpstan-ignore method.nonObject, property.notFound
         }
 
         return '';
@@ -83,12 +83,12 @@ class BackendBehaviors
     public static function importSingle(FlatBackupItem $line, FlatImportV2 $bk): string
     {
         if ($line->__name == Carnaval::CARNAVAL_TABLE_NAME) {
-            $bk->carnaval->addClass(      // @phpstan-ignore-line
-                $line->comment_author,              // @phpstan-ignore-line
-                $line->comment_author_mail,         // @phpstan-ignore-line
-                $line->comment_class,               // @phpstan-ignore-line
-                $line->comment_text_color,          // @phpstan-ignore-line
-                $line->comment_background_color     // @phpstan-ignore-line
+            $bk->carnaval->addClass(      // @phpstan-ignore method.nonObject, property.notFound
+                $line->comment_author,              // @phpstan-ignore property.notFound
+                $line->comment_author_mail,         // @phpstan-ignore property.notFound
+                $line->comment_class,               // @phpstan-ignore property.notFound
+                $line->comment_text_color,          // @phpstan-ignore property.notFound
+                $line->comment_background_color     // @phpstan-ignore property.notFound
             );
         }
 

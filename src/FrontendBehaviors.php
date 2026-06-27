@@ -28,13 +28,11 @@ class FrontendBehaviors
 
     public static function carnavalStyleHelper(): string
     {
-        if (!App::backend()->carnaval instanceof Carnaval) {
+        if (!App::frontend()->carnaval instanceof Carnaval) {
             return '';
         }
 
-        $carnaval = App::backend()->carnaval;
-
-        $rs = $carnaval->getClasses();
+        $rs = App::frontend()->carnaval->getClasses();
 
         /**
          * @var array<string, array<string>>

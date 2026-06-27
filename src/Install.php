@@ -36,9 +36,9 @@ class Install
 
         try {
             // Init
-            $new_structure = App::db()->structure();
+            $struct = App::db()->structure();
 
-            $new_structure->carnaval
+            $struct->table(Carnaval::CARNAVAL_TABLE_NAME)
                 ->field('class_id', 'integer', 0, false)
                 ->field('blog_id', 'varchar', 32, false)
                 ->field('comment_author', 'varchar', 255, false)
@@ -52,7 +52,7 @@ class Install
             ;
 
             $current_structure = App::db()->structure();
-            $current_structure->synchronize($new_structure);
+            $current_structure->synchronize($struct);
 
             $settings = My::settings();
             $settings->put('carnaval_active', false, App::blogWorkspace()::NS_BOOL, 'Carnaval activation flag', false, true);
