@@ -188,7 +188,7 @@ class Carnaval
         }
 
         $rs    = $this->getClasses(['mail' => $mail]);
-        $class = !$rs->isEmpty() && is_string($class = $rs->comment_class) ? $class : '';
+        $class = !$rs->isEmpty() ? $rs->strField('comment_class') : '';
 
         $this->cache[$mail] = $class;
 
