@@ -42,9 +42,9 @@ class FrontendBehaviors
         $res = '';
 
         while ($rs->fetch()) {
-            $comment_class            = is_string($comment_class = $rs->comment_class) ? $comment_class : '';
-            $comment_text_color       = is_string($comment_text_color = $rs->comment_text_color) ? $comment_text_color : '#ffffff';
-            $comment_background_color = is_string($comment_background_color = $rs->comment_background_color) ? $comment_background_color : '#000000';
+            $comment_class            = $rs->strField('comment_class');
+            $comment_text_color       = $rs->strField('comment_text_color', true) ?: '#ffffff';
+            $comment_background_color = $rs->strField('comment_background_color') ?: '#000000';
 
             $css['#comments dd.' . $comment_class] = [
                 'color: ' . $comment_text_color . ';',

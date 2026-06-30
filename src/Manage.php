@@ -271,13 +271,13 @@ class Manage
         if (!$rs->isEmpty()) {
             $rows = [];
             while ($rs->fetch()) {
-                $class_id = is_numeric($class_id = $rs->class_id) ? (int) $class_id : '';
-                if ($class_id !== '') {
-                    $comment_author           = is_string($comment_author = $rs->comment_author) ? $comment_author : '';
-                    $comment_class            = is_string($comment_class = $rs->comment_class) ? $comment_class : '';
-                    $comment_author_mail      = is_string($comment_author_mail = $rs->comment_author_mail) ? $comment_author_mail : '';
-                    $comment_text_color       = is_string($comment_text_color = $rs->comment_text_color) ? $comment_text_color : '#ffffff';
-                    $comment_background_color = is_string($comment_background_color = $rs->comment_background_color) ? $comment_background_color : '#000000';
+                $class_id = $rs->intField('class_id');
+                if ($class_id !== 0) {
+                    $comment_author           = $rs->strField('comment_author');
+                    $comment_class            = $rs->strField('comment_class');
+                    $comment_author_mail      = $rs->strField('comment_author_mail');
+                    $comment_text_color       = $rs->strField('comment_text_color', true) ?: '#ffffff';
+                    $comment_background_color = $rs->strField('comment_background_color', true) ?: '#000000';
 
                     $rows[] = (new Tr('l_' . $class_id))
                         ->class('line')
