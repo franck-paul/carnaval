@@ -30,7 +30,7 @@ class CoreHelper
 
     public static function imagesURL(): string
     {
-        $p_url = is_string($p_url = App::blog()->settings()->system->public_url) ? $p_url : '';
+        $p_url = App::blog()->settings()->get('system')->getStr('public_url', false);
 
         return $p_url . '/carnaval-images';
     }

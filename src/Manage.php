@@ -197,8 +197,8 @@ class Manage
         $button = __('save');
 
         // Getting current parameters
-        $active = (bool) $settings->carnaval_active;
-        $colors = (bool) $settings->carnaval_colors;
+        $active = $settings->getBool('carnaval_active', false);
+        $colors = $settings->getBool('carnaval_colors', false);
 
         try {
             if (!empty($_REQUEST['id'])) {

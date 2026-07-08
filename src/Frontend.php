@@ -36,10 +36,10 @@ class Frontend
         App::frontend()->carnaval = new Carnaval();
 
         $settings = My::settings();
-        if ($settings->carnaval_active) {
+        if ($settings->getBool('carnaval_active')) {
             App::frontend()->template()->addValue('CommentIfMe', FrontendTemplate::CommentIfMe(...));
 
-            if ($settings->carnaval_colors) {
+            if ($settings->getBool('carnaval_colors')) {
                 App::behavior()->addBehaviors([
                     'publicHeadContent' => FrontendBehaviors::publicHeadContent(...),
                 ]);

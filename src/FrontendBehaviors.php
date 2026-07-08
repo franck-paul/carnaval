@@ -51,7 +51,7 @@ class FrontendBehaviors
                 'background-color: ', $comment_background_color,';',
             ];
 
-            $theme = is_string($theme = App::blog()->settings()->system->theme) ? $theme : '';
+            $theme = App::blog()->settings()->get('system')->getStr('theme', false);
             if ($theme === 'blowup') {
                 $image = $comment_class . '-comment-t.png';
                 $file  = CoreHelper::imagesPath() . '/' . $image;
