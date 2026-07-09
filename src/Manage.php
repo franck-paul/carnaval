@@ -210,11 +210,11 @@ class Manage
                     $legend             = __('Edit CSS Class');
                     $button             = __('update');
 
-                    $comment_author           = $rs->comment_author;
-                    $comment_author_mail      = $rs->comment_author_mail;
-                    $comment_class            = $rs->comment_class;
-                    $comment_text_color       = $rs->comment_text_color;
-                    $comment_background_color = $rs->comment_background_color;
+                    $comment_author           = $rs->strField('comment_author');
+                    $comment_author_mail      = $rs->strField('comment_author_mail');
+                    $comment_class            = $rs->strField('comment_class');
+                    $comment_text_color       = $rs->strField('comment_text_color');
+                    $comment_background_color = $rs->strField('comment_background_color');
                 }
             }
         } catch (Exception $exception) {
