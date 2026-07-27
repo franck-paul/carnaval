@@ -130,7 +130,10 @@ class Manage
         }
 
         // Delete CSS Class
-        if (!empty($_POST['removeaction']) && !empty($_POST['select']) && is_array($_POST['select'])) {
+        if (!empty($_POST['removeaction'])
+            && !empty($_POST['select'])
+            && is_array($_POST['select'])
+        ) {
             foreach ($_POST['select'] as $v) {
                 $id = is_numeric($id = $v) ? (int) $id : '';
                 if ($id !== '') {
