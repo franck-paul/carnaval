@@ -105,23 +105,23 @@ class Carnaval
      */
     public function addClass(string $author, string $mail, string $text, string $backg, string $class): void
     {
-        $cur                           = App::db()->con()->openCursor($this->table);
-        $cur->blog_id                  = $this->blog->id();
-        $cur->comment_author           = $author;
-        $cur->comment_author_mail      = $mail;
-        $cur->comment_class            = $class;
-        $cur->comment_text_color       = $text;
-        $cur->comment_background_color = $backg;
+        $cur = App::db()->con()->openCursor($this->table);
+        $cur->setStrField('blog_id', $this->blog->id());
+        $cur->setStrField('comment_author', $author);
+        $cur->setStrField('comment_author_mail', $mail);
+        $cur->setStrField('comment_class', $class);
+        $cur->setStrField('comment_text_color', $text);
+        $cur->setStrField('comment_background_color', $backg);
 
-        if ($cur->comment_author === '') {
+        if ($cur->strField('comment_author') === '') {
             throw new Exception(__('You must provide a name.'));
         }
 
-        if ($cur->comment_class === '') {
+        if ($cur->strField('comment_class') === '') {
             throw new Exception(__('You must provide a CSS Class.'));
         }
 
-        if ($cur->comment_author_mail === '') {
+        if ($cur->strField('comment_author_mail') === '') {
             throw new Exception(__('You must provide an e-mail.'));
         }
 
@@ -133,7 +133,7 @@ class Carnaval
         $rs      = $sql->select();
         $last_id = $rs instanceof MetaRecord ? $rs->cardinal() : 0;
 
-        $cur->class_id = $last_id + 1;
+        $cur->setIntField('class_id', $last_id + 1);
         $cur->insert();
 
         $this->blog->triggerBlog();
@@ -143,20 +143,20 @@ class Carnaval
     {
         $cur = App::db()->con()->openCursor($this->table);
 
-        $cur->comment_author_mail      = $mail;
-        $cur->comment_class            = $class;
-        $cur->comment_text_color       = $text;
-        $cur->comment_background_color = $backg;
+        $cur->setStrField('comment_author_mail', $mail);
+        $cur->setStrField('comment_class', $class);
+        $cur->setStrField('comment_text_color', $text);
+        $cur->setStrField('comment_background_color', $backg);
 
         if ($author !== '') {
-            $cur->comment_author = $author;
+            $cur->setStrField('comment_author', $author);
         }
 
-        if ($cur->comment_class === '') {
+        if ($cur->strField('comment_class') === '') {
             throw new Exception(__('You must provide a CSS Class.'));
         }
 
-        if ($cur->comment_author_mail === '') {
+        if ($cur->strField('comment_author_mail') === '') {
             throw new Exception(__('You must provide an e-mail.'));
         }
 
