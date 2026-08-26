@@ -25,6 +25,9 @@ use Exception;
 
 class Carnaval
 {
+    /**
+     * @var string CARNAVAL_TABLE_NAME
+     */
     public const CARNAVAL_TABLE_NAME = 'carnaval';
 
     /**
