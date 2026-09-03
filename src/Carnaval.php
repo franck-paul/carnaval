@@ -55,8 +55,8 @@ class Carnaval
      */
     public function getClasses(array $params = []): MetaRecord
     {
-        $sql = new SelectStatement();
-        $sql
+        $selectStatement = new SelectStatement();
+        $selectStatement
             ->columns([
                 'class_id',
                 'comment_author',
@@ -66,21 +66,21 @@ class Carnaval
                 'comment_background_color',
             ])
             ->from($this->table)
-            ->where('blog_id = ' . $sql->quote($this->blog->id()));
+            ->where('blog_id = ' . $selectStatement->quote($this->blog->id()));
         ;
 
         if (isset($params['class_id'])) {
-            $sql->and('class_id = ' . $params['class_id']);
+            $selectStatement->and('class_id = ' . $params['class_id']);
         }
 
         if (isset($params['mail'])) {
-            $sql
-                ->and('comment_author_mail <> ' . $sql->quote(''))
-                ->and('comment_author_mail = ' . $sql->quote($params['mail']))
+            $selectStatement
+                ->and('comment_author_mail <> ' . $selectStatement->quote(''))
+                ->and('comment_author_mail = ' . $selectStatement->quote($params['mail']))
             ;
         }
 
-        return $sql->select() ?? MetaRecord::newFromArray([]);
+        return $selectStatement->select() ?? MetaRecord::newFromArray([]);
     }
 
     /**
@@ -108,76 +108,76 @@ class Carnaval
      */
     public function addClass(string $author, string $mail, string $text, string $backg, string $class): void
     {
-        $cur = App::db()->con()->openCursor($this->table);
-        $cur->setStrField('blog_id', $this->blog->id());
-        $cur->setStrField('comment_author', $author);
-        $cur->setStrField('comment_author_mail', $mail);
-        $cur->setStrField('comment_class', $class);
-        $cur->setStrField('comment_text_color', $text);
-        $cur->setStrField('comment_background_color', $backg);
+        $cursor = App::db()->con()->openCursor($this->table);
+        $cursor->setStrField('blog_id', $this->blog->id());
+        $cursor->setStrField('comment_author', $author);
+        $cursor->setStrField('comment_author_mail', $mail);
+        $cursor->setStrField('comment_class', $class);
+        $cursor->setStrField('comment_text_color', $text);
+        $cursor->setStrField('comment_background_color', $backg);
 
-        if ($cur->strField('comment_author') === '') {
+        if ($cursor->strField('comment_author') === '') {
             throw new Exception(__('You must provide a name.'));
         }
 
-        if ($cur->strField('comment_class') === '') {
+        if ($cursor->strField('comment_class') === '') {
             throw new Exception(__('You must provide a CSS Class.'));
         }
 
-        if ($cur->strField('comment_author_mail') === '') {
+        if ($cursor->strField('comment_author_mail') === '') {
             throw new Exception(__('You must provide an e-mail.'));
         }
 
-        $sql = new SelectStatement();
-        $sql
+        $selectStatement = new SelectStatement();
+        $selectStatement
             ->from($this->table)
-            ->column($sql->max('class_id'));
+            ->column($selectStatement->max('class_id'));
 
-        $rs      = $sql->select();
-        $last_id = $rs instanceof MetaRecord ? $rs->cardinal() : 0;
+        $metaRecord = $selectStatement->select();
+        $last_id    = $metaRecord instanceof MetaRecord ? $metaRecord->cardinal() : 0;
 
-        $cur->setIntField('class_id', $last_id + 1);
-        $cur->insert();
+        $cursor->setIntField('class_id', $last_id + 1);
+        $cursor->insert();
 
         $this->blog->triggerBlog();
     }
 
     public function updateClass(int $id, string $author, string $mail = '', string $text = '', string $backg = '', string $class = ''): void
     {
-        $cur = App::db()->con()->openCursor($this->table);
+        $cursor = App::db()->con()->openCursor($this->table);
 
-        $cur->setStrField('comment_author_mail', $mail);
-        $cur->setStrField('comment_class', $class);
-        $cur->setStrField('comment_text_color', $text);
-        $cur->setStrField('comment_background_color', $backg);
+        $cursor->setStrField('comment_author_mail', $mail);
+        $cursor->setStrField('comment_class', $class);
+        $cursor->setStrField('comment_text_color', $text);
+        $cursor->setStrField('comment_background_color', $backg);
 
         if ($author !== '') {
-            $cur->setStrField('comment_author', $author);
+            $cursor->setStrField('comment_author', $author);
         }
 
-        if ($cur->strField('comment_class') === '') {
+        if ($cursor->strField('comment_class') === '') {
             throw new Exception(__('You must provide a CSS Class.'));
         }
 
-        if ($cur->strField('comment_author_mail') === '') {
+        if ($cursor->strField('comment_author_mail') === '') {
             throw new Exception(__('You must provide an e-mail.'));
         }
 
-        $sql = new UpdateStatement();
-        $sql
-            ->where('blog_id = ' . $sql->quote($this->blog->id()))
+        $updateStatement = new UpdateStatement();
+        $updateStatement
+            ->where('blog_id = ' . $updateStatement->quote($this->blog->id()))
             ->and('class_id = ' . $id)
-            ->update($cur);
+            ->update($cursor);
 
         $this->blog->triggerBlog();
     }
 
     public function delClass(int $id): void
     {
-        $sql = new DeleteStatement();
-        $sql
+        $deleteStatement = new DeleteStatement();
+        $deleteStatement
             ->from($this->table)
-            ->where('blog_id = ' . $sql->quote($this->blog->id()))
+            ->where('blog_id = ' . $deleteStatement->quote($this->blog->id()))
             ->and('class_id = ' . $id)
             ->delete();
 
@@ -190,8 +190,8 @@ class Carnaval
             return $this->cache[$mail];
         }
 
-        $rs    = $this->getClasses(['mail' => $mail]);
-        $class = $rs->isEmpty() ? '' : $rs->strField('comment_class');
+        $metaRecord = $this->getClasses(['mail' => $mail]);
+        $class      = $metaRecord->isEmpty() ? '' : $metaRecord->strField('comment_class');
 
         $this->cache[$mail] = $class;
 

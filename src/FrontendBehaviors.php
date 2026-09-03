@@ -32,7 +32,7 @@ class FrontendBehaviors
             return '';
         }
 
-        $rs = App::frontend()->carnaval->getClasses();
+        $metaRecord = App::frontend()->carnaval->getClasses();
 
         /**
          * @var array<string, array<string>>
@@ -41,10 +41,10 @@ class FrontendBehaviors
 
         $res = '';
 
-        while ($rs->fetch()) {
-            $comment_class            = $rs->strField('comment_class');
-            $comment_text_color       = $rs->strField('comment_text_color', true) ?: '#ffffff';
-            $comment_background_color = $rs->strField('comment_background_color') ?: '#000000';
+        while ($metaRecord->fetch()) {
+            $comment_class            = $metaRecord->strField('comment_class');
+            $comment_text_color       = $metaRecord->strField('comment_text_color', true) ?: '#ffffff';
+            $comment_background_color = $metaRecord->strField('comment_background_color') ?: '#000000';
 
             $css['#comments dd.' . $comment_class] = [
                 'color: ' . $comment_text_color . ';',

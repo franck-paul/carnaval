@@ -23,17 +23,17 @@ use Dotclear\Plugin\importExport\FlatImportV2;
 
 class BackendBehaviors
 {
-    public static function exportFull(FlatExport $exp): string
+    public static function exportFull(FlatExport $flatExport): string
     {
-        $exp->exportTable(Carnaval::CARNAVAL_TABLE_NAME);
+        $flatExport->exportTable(Carnaval::CARNAVAL_TABLE_NAME);
 
         return '';
     }
 
-    public static function exportSingle(FlatExport $exp, string $blog_id): string
+    public static function exportSingle(FlatExport $flatExport, string $blog_id): string
     {
-        $sql = new SelectStatement();
-        $sql
+        $selectStatement = new SelectStatement();
+        $selectStatement
             ->columns([
                 'comment_author',
                 'comment_author_mail',
@@ -41,54 +41,54 @@ class BackendBehaviors
                 'comment_text_color',
                 'comment_background_color',
             ])
-            ->from($sql->as(App::db()->con()->prefix() . Carnaval::CARNAVAL_TABLE_NAME, 'C'))
-            ->where('C.blog_id = ' . $sql->quote($blog_id))
+            ->from($selectStatement->as(App::db()->con()->prefix() . Carnaval::CARNAVAL_TABLE_NAME, 'C'))
+            ->where('C.blog_id = ' . $selectStatement->quote($blog_id))
         ;
 
-        $exp->export(
+        $flatExport->export(
             Carnaval::CARNAVAL_TABLE_NAME,
-            $sql->statement()
+            $selectStatement->statement()
         );
 
         return '';
     }
 
-    public static function importInit(FlatImportV2 $bk): string
+    public static function importInit(FlatImportV2 $flatImportV2): string
     {
-        $bk->cur_alias = App::db()->con()->openCursor(App::db()->con()->prefix() . Carnaval::CARNAVAL_TABLE_NAME); // @phpstan-ignore property.notFound
-        $bk->carnaval  = new Carnaval();                                                                // @phpstan-ignore property.notFound
-        $bk->classes   = $bk->carnaval->getClasses();                                                   // @phpstan-ignore property.notFound
+        $flatImportV2->cur_alias = App::db()->con()->openCursor(App::db()->con()->prefix() . Carnaval::CARNAVAL_TABLE_NAME); // @phpstan-ignore property.notFound
+        $flatImportV2->carnaval  = new Carnaval();                                                                // @phpstan-ignore property.notFound
+        $flatImportV2->classes   = $flatImportV2->carnaval->getClasses();                                                   // @phpstan-ignore property.notFound
 
         return '';
     }
 
-    public static function importFull(FlatBackupItem $line, FlatImportV2 $bk): string
+    public static function importFull(FlatBackupItem $flatBackupItem, FlatImportV2 $flatImportV2): string
     {
-        if ($line->__name == Carnaval::CARNAVAL_TABLE_NAME) {
-            $bk->cur_alias->clean();    // @phpstan-ignore method.nonObject, property.notFound
+        if ($flatBackupItem->__name == Carnaval::CARNAVAL_TABLE_NAME) {
+            $flatImportV2->cur_alias->clean();    // @phpstan-ignore method.nonObject, property.notFound
 
-            $bk->cur_alias->blog_id                  = (string) $line->blog_id;                     // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
-            $bk->cur_alias->comment_author           = (string) $line->comment_author;              // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
-            $bk->cur_alias->comment_author_mail      = (string) $line->comment_author_mail;         // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
-            $bk->cur_alias->comment_class            = (string) $line->comment_class;               // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
-            $bk->cur_alias->comment_text_color       = (string) $line->comment_text_color;          // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
-            $bk->cur_alias->comment_background_color = (string) $line->comment_background_color;    // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
+            $flatImportV2->cur_alias->blog_id                  = (string) $flatBackupItem->blog_id;                     // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
+            $flatImportV2->cur_alias->comment_author           = (string) $flatBackupItem->comment_author;              // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
+            $flatImportV2->cur_alias->comment_author_mail      = (string) $flatBackupItem->comment_author_mail;         // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
+            $flatImportV2->cur_alias->comment_class            = (string) $flatBackupItem->comment_class;               // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
+            $flatImportV2->cur_alias->comment_text_color       = (string) $flatBackupItem->comment_text_color;          // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
+            $flatImportV2->cur_alias->comment_background_color = (string) $flatBackupItem->comment_background_color;    // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
 
-            $bk->cur_alias->insert();   // @phpstan-ignore method.nonObject, property.notFound
+            $flatImportV2->cur_alias->insert();   // @phpstan-ignore method.nonObject, property.notFound
         }
 
         return '';
     }
 
-    public static function importSingle(FlatBackupItem $line, FlatImportV2 $bk): string
+    public static function importSingle(FlatBackupItem $flatBackupItem, FlatImportV2 $flatImportV2): string
     {
-        if ($line->__name == Carnaval::CARNAVAL_TABLE_NAME) {
-            $bk->carnaval->addClass(      // @phpstan-ignore method.nonObject, property.notFound
-                $line->comment_author,              // @phpstan-ignore property.notFound
-                $line->comment_author_mail,         // @phpstan-ignore property.notFound
-                $line->comment_class,               // @phpstan-ignore property.notFound
-                $line->comment_text_color,          // @phpstan-ignore property.notFound
-                $line->comment_background_color     // @phpstan-ignore property.notFound
+        if ($flatBackupItem->__name == Carnaval::CARNAVAL_TABLE_NAME) {
+            $flatImportV2->carnaval->addClass(      // @phpstan-ignore method.nonObject, property.notFound
+                $flatBackupItem->comment_author,              // @phpstan-ignore property.notFound
+                $flatBackupItem->comment_author_mail,         // @phpstan-ignore property.notFound
+                $flatBackupItem->comment_class,               // @phpstan-ignore property.notFound
+                $flatBackupItem->comment_text_color,          // @phpstan-ignore property.notFound
+                $flatBackupItem->comment_background_color     // @phpstan-ignore property.notFound
             );
         }
 
