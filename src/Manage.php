@@ -189,12 +189,7 @@ class Manage
 
         $carnaval = App::backend()->carnaval;
 
-        $settings                 = My::settings();
-        $comment_author           = '';
-        $comment_author_mail      = '';
-        $comment_class            = '';
-        $comment_text_color       = '#ffffff';
-        $comment_background_color = '#000000';
+        $settings = My::settings();
 
         $legend = __('New CSS Class');
         $button = __('save');
@@ -207,17 +202,9 @@ class Manage
             if (!empty($_REQUEST['id'])) {
                 $id = is_numeric($id = $_REQUEST['id']) ? (int) $id : 0;
                 if ($id !== 0) {
-                    $rs = $carnaval->getClass($id);
-
                     self::$add_carnaval = true;
                     $legend             = __('Edit CSS Class');
                     $button             = __('update');
-
-                    $comment_author           = $rs->strField('comment_author');
-                    $comment_author_mail      = $rs->strField('comment_author_mail');
-                    $comment_class            = $rs->strField('comment_class');
-                    $comment_text_color       = $rs->strField('comment_text_color');
-                    $comment_background_color = $rs->strField('comment_background_color');
                 }
             }
         } catch (Exception $exception) {
