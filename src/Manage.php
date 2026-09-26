@@ -256,18 +256,18 @@ class Manage
         ->render();
 
         // Get CSS Classes
-        $rs = $carnaval->getClasses();
+        $metaRecord = $carnaval->getClasses();
 
-        if (!$rs->isEmpty()) {
+        if (!$metaRecord->isEmpty()) {
             $rows = [];
-            while ($rs->fetch()) {
-                $class_id = $rs->intField('class_id');
+            while ($metaRecord->fetch()) {
+                $class_id = $metaRecord->intField('class_id');
                 if ($class_id !== 0) {
-                    $comment_author           = $rs->strField('comment_author');
-                    $comment_class            = $rs->strField('comment_class');
-                    $comment_author_mail      = $rs->strField('comment_author_mail');
-                    $comment_text_color       = $rs->strField('comment_text_color', true) ?: '#ffffff';
-                    $comment_background_color = $rs->strField('comment_background_color', true) ?: '#000000';
+                    $comment_author           = $metaRecord->strField('comment_author');
+                    $comment_class            = $metaRecord->strField('comment_class');
+                    $comment_author_mail      = $metaRecord->strField('comment_author_mail');
+                    $comment_text_color       = $metaRecord->strField('comment_text_color', true) ?: '#ffffff';
+                    $comment_background_color = $metaRecord->strField('comment_background_color', true) ?: '#000000';
 
                     $rows[] = (new Tr('l_' . $class_id))
                         ->class('line')
