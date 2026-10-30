@@ -64,7 +64,7 @@ class BackendBehaviors
 
     public static function importFull(FlatBackupItem $flatBackupItem, FlatImportV2 $flatImportV2): string
     {
-        if ($flatBackupItem->__name == Carnaval::CARNAVAL_TABLE_NAME) {
+        if ($flatBackupItem->__name === Carnaval::CARNAVAL_TABLE_NAME) {
             $flatImportV2->cur_alias->clean();    // @phpstan-ignore method.nonObject, property.notFound
 
             $flatImportV2->cur_alias->blog_id                  = (string) $flatBackupItem->blog_id;                     // @phpstan-ignore property.notFound, cast.string, property.notFound, property.nonObject
@@ -82,7 +82,7 @@ class BackendBehaviors
 
     public static function importSingle(FlatBackupItem $flatBackupItem, FlatImportV2 $flatImportV2): string
     {
-        if ($flatBackupItem->__name == Carnaval::CARNAVAL_TABLE_NAME) {
+        if ($flatBackupItem->__name === Carnaval::CARNAVAL_TABLE_NAME) {
             $flatImportV2->carnaval->addClass(      // @phpstan-ignore method.nonObject, property.notFound
                 $flatBackupItem->comment_author,              // @phpstan-ignore property.notFound
                 $flatBackupItem->comment_author_mail,         // @phpstan-ignore property.notFound
