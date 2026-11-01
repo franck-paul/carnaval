@@ -112,7 +112,7 @@ class CoreHelper
     public static function dropImage(string $img): void
     {
         $img = Path::real(self::imagesPath() . '/' . $img);
-        if ($img && is_writable(dirname($img))) {
+        if ($img !== false && is_writable(dirname($img))) {
             @unlink($img);
             @unlink(dirname($img) . '/.' . basename($img, '.png') . '_sq.jpg');
             @unlink(dirname($img) . '/.' . basename($img, '.png') . '_m.jpg');
