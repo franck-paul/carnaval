@@ -23,16 +23,16 @@ class CoreHelper
 {
     public static function imagesPath(): string
     {
-        $p_root = is_string($p_root = Path::real(App::blog()->publicPath())) ? $p_root : '';
+        $path = is_string($path = Path::real(App::blog()->publicPath())) ? $path : '';
 
-        return $p_root . '/carnaval-images';
+        return $path . '/carnaval-images';
     }
 
     public static function imagesURL(): string
     {
-        $p_url = App::blog()->settings()->get('system')->getStr('public_url', false);
+        $url = App::blog()->settings()->get('system')->getStr('public_url', false);
 
-        return $p_url . '/carnaval-images';
+        return $url . '/carnaval-images';
     }
 
     public static function canWriteImages(bool $create = false): bool
